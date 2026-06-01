@@ -198,8 +198,16 @@
     .scroll-fade { animation: fadeUp 0.8s ease-out both; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .neon-text { text-shadow: 0 0 8px rgba(216, 37, 46, 0.9), 0 0 24px rgba(216, 37, 46, 0.6); }
-    .field-group { display: none; }
-    .field-group.active { display: block; }
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+    .family-section { display: none; }
+    .family-section.active { display: block; }
+    .conditional-field { display: none; }
+    .conditional-field.active { display: block; }
+    @keyframes stepFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .form-step.active { animation: stepFade 0.35s ease-out; }
+    .summary-grid dt { color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+    .summary-grid dd { color: #0F2553; font-weight: 600; margin-top: 2px; margin-bottom: 12px; }
   </style>
 </head>
 <body class="bg-stone-50 text-navy-dark antialiased">
@@ -496,212 +504,295 @@
         data-netlify="true"
         netlify-honeypot="bot-field"
         action="/thanks.html"
-        class="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-stone-200"
+        class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-stone-200"
         id="addressit-order-form"
       >
         <input type="hidden" name="form-name" value="addressit-order" />
         <input type="hidden" name="order-ref" id="order-ref-input" />
         <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
 
-        <!-- CONTACT -->
-        <p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-4">Your info</p>
-        <div class="space-y-5">
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">Name</label>
-            <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+        <!-- PROGRESS BAR -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold text-stone-500 uppercase tracking-wider" id="step-label">Step 1 of 4</span>
+            <span class="text-sm font-bold text-navy-dark" id="step-title">Your details</span>
           </div>
-          <div class="grid md:grid-cols-2 gap-5">
-            <div>
-              <label class="block text-sm font-bold mb-2 text-navy-dark">Email</label>
-              <input type="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
-            </div>
-            <div>
-              <label class="block text-sm font-bold mb-2 text-navy-dark">Phone</label>
-              <input type="tel" name="phone" required class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
-            </div>
+          <div class="h-2 bg-stone-100 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-brandred transition-all duration-500" style="width: 25%;"></div>
           </div>
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">Shipping address</label>
-            <input type="text" name="address" required placeholder="Street" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition mb-3" />
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-              <input type="text" name="city" required placeholder="City" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
-              <input type="text" name="state" required placeholder="State" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
-              <input type="text" name="zip" required placeholder="ZIP" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
-            </div>
-          </div>
-          <div class="grid md:grid-cols-2 gap-5">
+        </div>
+
+        <!-- STEP 1 — CONTACT -->
+        <div class="form-step active" data-step="1">
+          <div class="space-y-5">
             <div>
-              <label class="block text-sm font-bold mb-2 text-navy-dark">Purchase Order # <span class="text-stone-400 font-normal">(optional)</span></label>
-              <input type="text" name="purchase-order" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              <label class="block text-sm font-bold mb-2 text-navy-dark">Full name</label>
+              <input type="text" name="name" data-required="1" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+            </div>
+            <div class="grid md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Email</label>
+                <input type="email" name="email" data-required="1" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Phone</label>
+                <input type="tel" name="phone" data-required="1" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
             </div>
             <div>
-              <label class="block text-sm font-bold mb-2 text-navy-dark">Promo code <span class="text-stone-400 font-normal">(optional)</span></label>
-              <input type="text" name="promocode" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              <label class="block text-sm font-bold mb-2 text-navy-dark">Shipping address</label>
+              <input type="text" name="address" data-required="1" placeholder="Street" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition mb-3" />
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <input type="text" name="city" data-required="1" placeholder="City" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+                <input type="text" name="state" data-required="1" placeholder="State" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+                <input type="text" name="zip" data-required="1" placeholder="ZIP" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Purchase Order # <span class="text-stone-400 font-normal">(optional)</span></label>
+                <input type="text" name="purchase-order" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Promo code <span class="text-stone-400 font-normal">(optional)</span></label>
+                <input type="text" name="promocode" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- PRODUCT FAMILY -->
-        <div class="pt-8 mt-8 border-t border-stone-200">
-          <p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-4">Choose your sign</p>
-          <label class="block text-sm font-bold mb-2 text-navy-dark">Product family</label>
-          <select name="product-family" id="product-family" required class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white mb-2">
-            <option value="">Choose a product family…</option>
-            <option value="MDR">MDR Series — Lit backplate signs (number lit from behind)</option>
-            <option value="IBL">IBL Series — 3D dimensional numbers</option>
-          </select>
+        <!-- STEP 2 — SIGN TYPE & MODEL -->
+        <div class="form-step" data-step="2">
+          <div class="space-y-5">
+            <div>
+              <label class="block text-sm font-bold mb-3 text-navy-dark">Which product family?</label>
+              <div class="grid md:grid-cols-2 gap-3">
+                <label class="cursor-pointer">
+                  <input type="radio" name="product-family" value="MDR" data-required="2" class="peer sr-only" />
+                  <div class="p-5 rounded-2xl border-2 border-stone-200 peer-checked:border-brandred peer-checked:bg-brandred-50 transition">
+                    <p class="font-display font-bold text-lg text-navy-dark">MDR Series</p>
+                    <p class="text-sm text-stone-600 mt-1">Lit backplate signs — number lit from behind on a black or white plate.</p>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="product-family" value="IBL" data-required="2" class="peer sr-only" />
+                  <div class="p-5 rounded-2xl border-2 border-stone-200 peer-checked:border-brandred peer-checked:bg-brandred-50 transition">
+                    <p class="font-display font-bold text-lg text-navy-dark">IBL Series</p>
+                    <p class="text-sm text-stone-600 mt-1">3D dimensional numbers in black, silver, or white. Single, on a line, or on a plate.</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- MDR branch -->
+            <div class="family-section space-y-5" data-family="MDR">
+              <div class="pt-2 border-t border-stone-200">
+                <label class="block text-sm font-bold mb-3 text-navy-dark mt-4">What goes on the sign?</label>
+                <div class="grid md:grid-cols-2 gap-3">
+                  <label class="cursor-pointer">
+                    <input type="radio" name="mdr-include-type" value="number-only" class="peer sr-only" />
+                    <div class="p-4 rounded-2xl border-2 border-stone-200 peer-checked:border-brandred peer-checked:bg-brandred-50 transition">
+                      <p class="font-bold text-navy-dark">Just the number</p>
+                      <p class="text-xs text-stone-600 mt-1">e.g. "1234"</p>
+                    </div>
+                  </label>
+                  <label class="cursor-pointer">
+                    <input type="radio" name="mdr-include-type" value="with-street" class="peer sr-only" />
+                    <div class="p-4 rounded-2xl border-2 border-stone-200 peer-checked:border-brandred peer-checked:bg-brandred-50 transition">
+                      <p class="font-bold text-navy-dark">Number + street name</p>
+                      <p class="text-xs text-stone-600 mt-1">e.g. "508 Seton Circle"</p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">MDR Model</label>
+                <select name="mdr-model" id="mdr-model-select" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+                  <option value="">Choose a model…</option>
+                  <option value="MDR" data-type="number-only" data-sizes="10">MDR — 10" (number only)</option>
+                  <option value="MDR-100" data-type="number-only" data-sizes="14,17">MDR-100 — 14" or 17" (number only)</option>
+                  <option value="MDR-200" data-type="number-only" data-sizes="14,17">MDR-200 — 14" or 17" (number, thin border)</option>
+                  <option value="MDR-101" data-type="with-street" data-sizes="14,17">MDR-101 — 14" or 17" (number + street name)</option>
+                  <option value="MDR-301" data-type="with-street" data-sizes="14,17">MDR-301 — 14" or 17" (number + street name with line)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Size</label>
+                <select name="mdr-size" id="mdr-size-select" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+                  <option value="">Choose a size…</option>
+                  <option value='10"' data-size="10">10"</option>
+                  <option value='14"' data-size="14">14"</option>
+                  <option value='17"' data-size="17">17"</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Address number <span class="text-stone-400 font-normal">(note any upper/lower case)</span></label>
+                <input type="text" name="address-number" maxlength="10" placeholder="e.g. 1234 or 6B" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
+              <div class="conditional-field" id="mdr-street-wrap">
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Street name</label>
+                <input type="text" name="street-name" placeholder="e.g. Seton Circle" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
+            </div>
+
+            <!-- IBL branch -->
+            <div class="family-section space-y-5" data-family="IBL">
+              <div class="pt-2 border-t border-stone-200">
+                <label class="block text-sm font-bold mb-2 text-navy-dark mt-4">IBL Model &amp; size</label>
+                <select name="ibl-model" id="ibl-model-select" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+                  <option value="">Choose a model…</option>
+                  <optgroup label="3D Single Numbers">
+                    <option value="IBL-8">IBL-8 — 8" single number</option>
+                    <option value="IBL-10">IBL-10 — 10" single number</option>
+                    <option value="IBL-12">IBL-12 — 12" single number</option>
+                    <option value="IBL-14">IBL-14 — 14" single number</option>
+                  </optgroup>
+                  <optgroup label="3D Numbers on a Line">
+                    <option value="IBLL-14">IBLL-14 — 14" numbers on a line</option>
+                    <option value="IBLL-17">IBLL-17 — 17" numbers on a line</option>
+                  </optgroup>
+                  <optgroup label="3D Numbers on a Plate">
+                    <option value="IBLP-14">IBLP-14 — 14" numbers on a plate</option>
+                    <option value="IBLP-17">IBLP-17 — 17" numbers on a plate</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Address number</label>
+                <input type="text" name="ibl-number" maxlength="10" placeholder="e.g. 1234" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- MDR fields -->
-        <div id="mdr-fields" class="field-group space-y-5 mt-6">
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">MDR Model</label>
-            <select name="mdr-model" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
-              <option value="">Choose a model…</option>
-              <option value="MDR">MDR — 10" (number only)</option>
-              <option value="MDR-100">MDR-100 — 14" or 17" (number only)</option>
-              <option value="MDR-101">MDR-101 — 14" or 17" (number + street name)</option>
-              <option value="MDR-200">MDR-200 — 14" or 17" (number with thin border)</option>
-              <option value="MDR-301">MDR-301 — 14" or 17" (number + street name with line)</option>
-            </select>
+        <!-- STEP 3 — STYLING -->
+        <div class="form-step" data-step="3">
+          <!-- MDR styling -->
+          <div class="family-section space-y-5" data-family="MDR">
+            <div class="grid md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Background color</label>
+                <select name="mdr-background" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+                  <option value="">Choose…</option>
+                  <option value="Black">Black</option>
+                  <option value="White">White</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Font</label>
+                <select name="mdr-font" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+                  <option value="">Choose…</option>
+                  <option value="Futura">Futura</option>
+                  <option value="Iowan Old">Iowan Old</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Illumination color</label>
+                <select name="mdr-illumination" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+                  <option value="">Choose…</option>
+                  <option value="White">White</option>
+                  <option value="Red">Red</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Number position</label>
+                <select name="mdr-position" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+                  <option value="">Choose…</option>
+                  <option value="Left">Left</option>
+                  <option value="Center">Center</option>
+                  <option value="Right">Right</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">Size</label>
-            <select name="mdr-size" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
-              <option value="">Choose a size…</option>
-              <option value='10"'>10" (MDR only)</option>
-              <option value='14"'>14"</option>
-              <option value='17"'>17"</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">Address number <span class="text-stone-400 font-normal">(clearly note any upper/lower case)</span></label>
-            <input type="text" name="address-number" maxlength="10" placeholder="e.g. 1234 or 6B" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
-          </div>
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">Street name <span class="text-stone-400 font-normal">(required for MDR-101 and MDR-301)</span></label>
-            <input type="text" name="street-name" placeholder="e.g. Seton Circle" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
-          </div>
-          <div class="grid md:grid-cols-2 gap-5">
+
+          <!-- IBL styling -->
+          <div class="family-section space-y-5" data-family="IBL">
             <div>
-              <label class="block text-sm font-bold mb-2 text-navy-dark">Background color</label>
-              <select name="mdr-background" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+              <label class="block text-sm font-bold mb-2 text-navy-dark">Number color</label>
+              <select name="ibl-number-color" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
                 <option value="">Choose…</option>
                 <option value="Black">Black</option>
+                <option value="Silver">Silver</option>
                 <option value="White">White</option>
               </select>
             </div>
-            <div>
-              <label class="block text-sm font-bold mb-2 text-navy-dark">Font</label>
-              <select name="mdr-font" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+            <div class="conditional-field" id="ibl-plate-color-wrap">
+              <label class="block text-sm font-bold mb-2 text-navy-dark">Plate color <span class="text-stone-400 font-normal">(IBLP models)</span></label>
+              <select name="ibl-plate-color" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
                 <option value="">Choose…</option>
-                <option value="Futura">Futura</option>
-                <option value="Iowan Old">Iowan Old</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid md:grid-cols-2 gap-5">
-            <div>
-              <label class="block text-sm font-bold mb-2 text-navy-dark">Illumination color</label>
-              <select name="mdr-illumination" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
-                <option value="">Choose…</option>
-                <option value="White">White</option>
-                <option value="Red">Red</option>
+                <option value="Black">Black</option>
+                <option value="Silver">Silver</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-bold mb-2 text-navy-dark">Number position</label>
-              <select name="mdr-position" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
+              <label class="block text-sm font-bold mb-2 text-navy-dark">Color illumination</label>
+              <select name="ibl-illumination" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
                 <option value="">Choose…</option>
-                <option value="Left">Left</option>
-                <option value="Center">Center</option>
-                <option value="Right">Right</option>
+                <option value="Warm White (3000K)">Warm White (3000K)</option>
+                <option value="Day White (4000K)">Day White (4000K)</option>
+                <option value="Cool White (6000K)">Cool White (6000K)</option>
               </select>
             </div>
           </div>
         </div>
 
-        <!-- IBL fields -->
-        <div id="ibl-fields" class="field-group space-y-5 mt-6">
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">IBL Model & size</label>
-            <select name="ibl-model" id="ibl-model-select" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
-              <option value="">Choose a model…</option>
-              <optgroup label="3D Single Numbers">
-                <option value="IBL-8">IBL-8 — 8" single number</option>
-                <option value="IBL-10">IBL-10 — 10" single number</option>
-                <option value="IBL-12">IBL-12 — 12" single number</option>
-                <option value="IBL-14">IBL-14 — 14" single number</option>
-              </optgroup>
-              <optgroup label="3D Numbers on a Line">
-                <option value="IBLL-14">IBLL-14 — 14" numbers on a line</option>
-                <option value="IBLL-17">IBLL-17 — 17" numbers on a line</option>
-              </optgroup>
-              <optgroup label="3D Numbers on a Plate">
-                <option value="IBLP-14">IBLP-14 — 14" numbers on a plate</option>
-                <option value="IBLP-17">IBLP-17 — 17" numbers on a plate</option>
-              </optgroup>
-            </select>
+        <!-- STEP 4 — POWER, NOTES, REVIEW, SUBMIT -->
+        <div class="form-step" data-step="4">
+          <div class="space-y-5">
+            <div>
+              <label class="block text-sm font-bold mb-3 text-navy-dark">Power option</label>
+              <div class="grid md:grid-cols-2 gap-3">
+                <label class="cursor-pointer">
+                  <input type="radio" name="power" value="Adaptor" data-required="4" class="peer sr-only" />
+                  <div class="p-4 rounded-2xl border-2 border-stone-200 peer-checked:border-brandred peer-checked:bg-brandred-50 transition">
+                    <p class="font-bold text-navy-dark">Adaptor</p>
+                    <p class="text-xs text-stone-600 mt-1">Plug into any standard outdoor outlet.</p>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="power" value="Hard wired" data-required="4" class="peer sr-only" />
+                  <div class="p-4 rounded-2xl border-2 border-stone-200 peer-checked:border-brandred peer-checked:bg-brandred-50 transition">
+                    <p class="font-bold text-navy-dark">Hard wired</p>
+                    <p class="text-xs text-stone-600 mt-1">Tie into existing exterior lighting.</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-2 text-navy-dark">Notes <span class="text-stone-400 font-normal">(optional)</span></label>
+              <textarea name="notes" rows="3" placeholder="Mounting surface, install date, special requests…" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition"></textarea>
+            </div>
           </div>
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">Address number</label>
-            <input type="text" name="ibl-number" maxlength="10" placeholder="e.g. 1234" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+
+          <!-- SUMMARY -->
+          <div class="mt-8 p-6 rounded-2xl bg-stone-50 border border-stone-200">
+            <p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-4">Order summary</p>
+            <dl class="summary-grid grid md:grid-cols-2 gap-x-6" id="order-summary"></dl>
           </div>
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">Number color</label>
-            <select name="ibl-number-color" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
-              <option value="">Choose…</option>
-              <option value="Black">Black</option>
-              <option value="Silver">Silver</option>
-              <option value="White">White</option>
-            </select>
-          </div>
-          <div id="ibl-plate-color-wrap" style="display:none;">
-            <label class="block text-sm font-bold mb-2 text-navy-dark">Plate color <span class="text-stone-400 font-normal">(for IBLP only)</span></label>
-            <select name="ibl-plate-color" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
-              <option value="">Choose…</option>
-              <option value="Black">Black</option>
-              <option value="Silver">Silver</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-bold mb-2 text-navy-dark">Color illumination</label>
-            <select name="ibl-illumination" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
-              <option value="">Choose…</option>
-              <option value="Warm White (3000K)">Warm White (3000K)</option>
-              <option value="Day White (4000K)">Day White (4000K)</option>
-              <option value="Cool White (6000K)">Cool White (6000K)</option>
-            </select>
+
+          <div class="mt-6 p-5 rounded-xl bg-navy-50 border border-navy/20 text-sm text-navy-dark">
+            <p class="font-bold mb-2">💳 How payment works</p>
+            <p class="mb-2">No payment is collected on this form. After you submit, <strong>Illumicor will call you within one business day</strong> to confirm and take payment by phone.</p>
+            <p class="text-xs text-navy">The charge appears as <strong>ILLUMICOR</strong>. A minimal foreign transaction fee may apply depending on your bank.</p>
           </div>
         </div>
 
-        <!-- POWER (both families) -->
-        <div id="power-section" class="field-group mt-6">
-          <label class="block text-sm font-bold mb-2 text-navy-dark">Power option</label>
-          <select name="power" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition bg-white">
-            <option value="">Choose…</option>
-            <option value="Adaptor">Adaptor (plug into outlet)</option>
-            <option value="Hard wired">Hard wired (tie into existing exterior lighting)</option>
-          </select>
+        <!-- NAV BUTTONS -->
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+          <button type="button" id="back-btn" class="hidden sm:flex-1 px-6 py-4 rounded-full border-2 border-stone-300 text-navy-dark font-bold hover:border-navy hover:bg-stone-50 transition">
+            ← Back
+          </button>
+          <button type="button" id="next-btn" class="sm:flex-1 px-6 py-4 rounded-full bg-navy text-white font-bold hover:bg-navy-dark transition shadow-md">
+            Next →
+          </button>
+          <button type="submit" id="submit-btn" class="hidden sm:flex-1 px-6 py-4 rounded-full bg-brandred text-white font-bold hover:bg-brandred-dark transition shadow-lg">
+            Submit order →
+          </button>
         </div>
-
-        <!-- NOTES -->
-        <div class="mt-6">
-          <label class="block text-sm font-bold mb-2 text-navy-dark">Notes <span class="text-stone-400 font-normal">(optional)</span></label>
-          <textarea name="notes" rows="3" placeholder="Anything else we should know — mounting surface, install date, special requests, etc." class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition"></textarea>
-        </div>
-
-        <!-- PAYMENT NOTICE -->
-        <div class="mt-8 p-5 rounded-xl bg-navy-50 border border-navy/20 text-sm text-navy-dark">
-          <p class="font-bold mb-2">💳 How payment works</p>
-          <p class="mb-2">No payment is collected on this form. After you submit, <strong>Illumicor will call you within one business day</strong> to confirm the order and take payment by phone — exactly the way it works today with the paper form.</p>
-          <p class="text-xs text-navy">The charge appears on your card statement as <strong>ILLUMICOR</strong>. Depending on your bank, a minimal foreign transaction fee may apply.</p>
-        </div>
-
-        <button type="submit" class="mt-8 w-full px-8 py-4 rounded-full bg-brandred text-white font-bold hover:bg-brandred-dark transition shadow-lg">
-          Submit order request →
-        </button>
-        <p class="text-xs text-stone-500 text-center mt-4">By submitting, you authorize Illumicor to contact you to fulfill this order. This order is custom and cannot be changed or cancelled once production begins.</p>
+        <p class="text-xs text-stone-500 text-center mt-4">This is a custom order. Once production begins it cannot be changed or cancelled.</p>
       </form>
 
       <!-- CONTACT LINK -->
@@ -807,49 +898,265 @@
   </footer>
 
   <script>
-    // Conditional form: show MDR or IBL fields based on family
     document.addEventListener('DOMContentLoaded', () => {
-      const familySelect = document.getElementById('product-family');
-      const mdrFields = document.getElementById('mdr-fields');
-      const iblFields = document.getElementById('ibl-fields');
-      const powerSection = document.getElementById('power-section');
+      const form = document.getElementById('addressit-order-form');
+      if (!form) return;
+
+      const steps = Array.from(form.querySelectorAll('.form-step'));
+      const totalSteps = steps.length;
+      const nextBtn = document.getElementById('next-btn');
+      const backBtn = document.getElementById('back-btn');
+      const submitBtn = document.getElementById('submit-btn');
+      const progressBar = document.getElementById('progress-bar');
+      const stepLabel = document.getElementById('step-label');
+      const stepTitle = document.getElementById('step-title');
+      const summaryEl = document.getElementById('order-summary');
+      const stepTitles = {
+        1: 'Your details',
+        2: 'Choose your sign',
+        3: 'Customize',
+        4: 'Power & submit'
+      };
+      let currentStep = 1;
+
+      // -------- Family-section visibility (MDR vs IBL) --------
+      function getFamily() {
+        const r = form.querySelector('input[name="product-family"]:checked');
+        return r ? r.value : '';
+      }
+
+      function syncFamilySections() {
+        const fam = getFamily();
+        form.querySelectorAll('.family-section').forEach(sec => {
+          sec.classList.toggle('active', sec.dataset.family === fam);
+        });
+      }
+
+      // -------- MDR: street name + model filtering --------
+      const mdrModelSelect = document.getElementById('mdr-model-select');
+      const mdrSizeSelect = document.getElementById('mdr-size-select');
+      const mdrStreetWrap = document.getElementById('mdr-street-wrap');
+
+      function getMdrIncludeType() {
+        const r = form.querySelector('input[name="mdr-include-type"]:checked');
+        return r ? r.value : '';
+      }
+
+      function syncMdrStreet() {
+        const includeType = getMdrIncludeType();
+        const showStreet = includeType === 'with-street';
+        mdrStreetWrap.classList.toggle('active', showStreet);
+        const streetInput = form.querySelector('input[name="street-name"]');
+        if (!showStreet) streetInput.value = '';
+      }
+
+      function syncMdrModels() {
+        const includeType = getMdrIncludeType();
+        let firstVisible = null;
+        Array.from(mdrModelSelect.options).forEach(opt => {
+          if (!opt.value) return;
+          const matches = !includeType || opt.dataset.type === includeType;
+          opt.hidden = !matches;
+          if (matches && !firstVisible) firstVisible = opt;
+        });
+        // If current selection is hidden, reset
+        const sel = mdrModelSelect.selectedOptions[0];
+        if (sel && sel.hidden) mdrModelSelect.value = '';
+      }
+
+      function syncMdrSizes() {
+        const sel = mdrModelSelect.selectedOptions[0];
+        if (!sel || !sel.value) {
+          // No model picked — show all sizes
+          Array.from(mdrSizeSelect.options).forEach(o => o.hidden = false);
+          return;
+        }
+        const allowed = (sel.dataset.sizes || '').split(',');
+        Array.from(mdrSizeSelect.options).forEach(o => {
+          if (!o.value) return;
+          o.hidden = !allowed.includes(o.dataset.size);
+        });
+        const curSize = mdrSizeSelect.selectedOptions[0];
+        if (curSize && curSize.hidden) mdrSizeSelect.value = '';
+      }
+
+      form.querySelectorAll('input[name="mdr-include-type"]').forEach(r => {
+        r.addEventListener('change', () => { syncMdrModels(); syncMdrStreet(); syncMdrSizes(); });
+      });
+      mdrModelSelect.addEventListener('change', syncMdrSizes);
+
+      // -------- IBL: plate color visibility --------
       const iblModelSelect = document.getElementById('ibl-model-select');
       const iblPlateWrap = document.getElementById('ibl-plate-color-wrap');
 
-      function syncSections() {
-        const v = familySelect.value;
-        mdrFields.classList.toggle('active', v === 'MDR');
-        iblFields.classList.toggle('active', v === 'IBL');
-        powerSection.classList.toggle('active', v === 'MDR' || v === 'IBL');
-      }
-
       function syncIblPlate() {
         const v = iblModelSelect.value;
-        iblPlateWrap.style.display = v.startsWith('IBLP') ? 'block' : 'none';
+        const show = v.startsWith('IBLP');
+        iblPlateWrap.classList.toggle('active', show);
+        if (!show) form.querySelector('select[name="ibl-plate-color"]').value = '';
+      }
+      iblModelSelect.addEventListener('change', syncIblPlate);
+
+      // Re-sync when family changes
+      form.querySelectorAll('input[name="product-family"]').forEach(r => {
+        r.addEventListener('change', () => {
+          syncFamilySections();
+          syncMdrModels();
+          syncMdrStreet();
+          syncMdrSizes();
+          syncIblPlate();
+        });
+      });
+
+      // -------- Validation per step --------
+      function isFieldFilled(field) {
+        if (field.type === 'radio') {
+          const group = form.querySelectorAll(`input[name="${field.name}"]`);
+          return Array.from(group).some(r => r.checked);
+        }
+        return !!field.value && field.value.trim() !== '';
       }
 
-      familySelect.addEventListener('change', syncSections);
-      iblModelSelect.addEventListener('change', syncIblPlate);
-      syncSections();
-      syncIblPlate();
+      function getStepRequiredFields(stepNum) {
+        const step = steps[stepNum - 1];
+        const fam = getFamily();
+        const fields = [];
 
-      // Order ref + submit
-      const form = document.getElementById('addressit-order-form');
-      if (!form) return;
+        // Fields explicitly marked data-required for this step
+        step.querySelectorAll(`[data-required="${stepNum}"]`).forEach(f => fields.push(f));
+
+        if (stepNum === 2 && fam === 'MDR') {
+          fields.push(form.querySelector('input[name="mdr-include-type"]'));
+          fields.push(mdrModelSelect);
+          fields.push(mdrSizeSelect);
+          fields.push(form.querySelector('input[name="address-number"]'));
+          if (getMdrIncludeType() === 'with-street') {
+            fields.push(form.querySelector('input[name="street-name"]'));
+          }
+        }
+        if (stepNum === 2 && fam === 'IBL') {
+          fields.push(iblModelSelect);
+          fields.push(form.querySelector('input[name="ibl-number"]'));
+        }
+        if (stepNum === 3 && fam === 'MDR') {
+          ['mdr-background','mdr-font','mdr-illumination','mdr-position'].forEach(n => {
+            fields.push(form.querySelector(`select[name="${n}"]`));
+          });
+        }
+        if (stepNum === 3 && fam === 'IBL') {
+          fields.push(form.querySelector('select[name="ibl-number-color"]'));
+          if (iblModelSelect.value.startsWith('IBLP')) {
+            fields.push(form.querySelector('select[name="ibl-plate-color"]'));
+          }
+          fields.push(form.querySelector('select[name="ibl-illumination"]'));
+        }
+        return fields.filter(Boolean);
+      }
+
+      function highlightInvalid(field) {
+        field.classList.add('border-brandred', 'ring-2', 'ring-brandred-50');
+        const off = () => {
+          field.classList.remove('border-brandred', 'ring-2', 'ring-brandred-50');
+          field.removeEventListener('input', off);
+          field.removeEventListener('change', off);
+        };
+        field.addEventListener('input', off);
+        field.addEventListener('change', off);
+      }
+
+      function validateStep(stepNum) {
+        const required = getStepRequiredFields(stepNum);
+        for (const f of required) {
+          if (!isFieldFilled(f)) {
+            // Find a focusable element to scroll to
+            const focusTarget = f.type === 'radio' ? f.closest('.form-step').querySelector(`input[name="${f.name}"]`) : f;
+            focusTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (f.type !== 'radio') {
+              f.focus();
+              highlightInvalid(f);
+            }
+            return false;
+          }
+        }
+        return true;
+      }
+
+      // -------- Step navigation --------
+      function showStep(n) {
+        if (n < 1 || n > totalSteps) return;
+        currentStep = n;
+        steps.forEach(s => s.classList.toggle('active', +s.dataset.step === n));
+        progressBar.style.width = (n / totalSteps * 100) + '%';
+        stepLabel.textContent = `Step ${n} of ${totalSteps}`;
+        stepTitle.textContent = stepTitles[n];
+        backBtn.classList.toggle('hidden', n === 1);
+        nextBtn.classList.toggle('hidden', n === totalSteps);
+        submitBtn.classList.toggle('hidden', n !== totalSteps);
+
+        if (n === totalSteps) renderSummary();
+
+        const orderSection = document.getElementById('order');
+        const top = orderSection.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+
+      nextBtn.addEventListener('click', () => {
+        if (validateStep(currentStep)) showStep(currentStep + 1);
+      });
+      backBtn.addEventListener('click', () => showStep(currentStep - 1));
+
+      // -------- Summary --------
+      function renderSummary() {
+        const data = new FormData(form);
+        const fam = getFamily();
+        const pairs = [
+          ['Name', data.get('name')],
+          ['Email', data.get('email')],
+          ['Phone', data.get('phone')],
+          ['Ship to', [data.get('address'), data.get('city'), data.get('state'), data.get('zip')].filter(Boolean).join(', ')],
+        ];
+        if (fam === 'MDR') {
+          pairs.push(['Family', 'MDR Series']);
+          pairs.push(['Model', data.get('mdr-model')]);
+          pairs.push(['Size', data.get('mdr-size')]);
+          pairs.push(['Number', data.get('address-number')]);
+          if (data.get('street-name')) pairs.push(['Street name', data.get('street-name')]);
+          pairs.push(['Background', data.get('mdr-background')]);
+          pairs.push(['Font', data.get('mdr-font')]);
+          pairs.push(['Illumination', data.get('mdr-illumination')]);
+          pairs.push(['Position', data.get('mdr-position')]);
+        } else if (fam === 'IBL') {
+          pairs.push(['Family', 'IBL Series']);
+          pairs.push(['Model', data.get('ibl-model')]);
+          pairs.push(['Number', data.get('ibl-number')]);
+          pairs.push(['Number color', data.get('ibl-number-color')]);
+          if (data.get('ibl-plate-color')) pairs.push(['Plate color', data.get('ibl-plate-color')]);
+          pairs.push(['Illumination', data.get('ibl-illumination')]);
+        }
+        if (data.get('power')) pairs.push(['Power', data.get('power')]);
+        if (data.get('promocode')) pairs.push(['Promo code', data.get('promocode')]);
+        if (data.get('purchase-order')) pairs.push(['PO #', data.get('purchase-order')]);
+        if (data.get('notes')) pairs.push(['Notes', data.get('notes')]);
+
+        summaryEl.innerHTML = pairs.filter(([_, v]) => v).map(([k, v]) =>
+          `<div><dt>${k}</dt><dd>${String(v).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</dd></div>`
+        ).join('');
+      }
+
+      // -------- Submit handler --------
       let submitting = false;
-
       form.addEventListener('submit', async (e) => {
         if (submitting) return;
+        if (!validateStep(currentStep)) { e.preventDefault(); return; }
         e.preventDefault();
         submitting = true;
 
-        const btn = form.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        btn.textContent = 'Submitting…';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
 
         let ref;
         try {
-          const res = await fetch('/api/order-ref', { method: 'GET' });
+          const res = await fetch('/api/order-ref');
           if (!res.ok) throw new Error('function returned ' + res.status);
           const data = await res.json();
           ref = data.ref;
@@ -864,6 +1171,14 @@
         form.action = '/thanks.html?ref=' + encodeURIComponent(ref);
         HTMLFormElement.prototype.submit.call(form);
       });
+
+      // Initial sync
+      syncFamilySections();
+      syncMdrModels();
+      syncMdrStreet();
+      syncMdrSizes();
+      syncIblPlate();
+      showStep(1);
     });
   </script>
 
