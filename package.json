@@ -1,0 +1,13 @@
+{
+  "name": "lumen-address",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marketing site for solar-powered illuminated address signs",
+  "scripts": {
+    "dev": "netlify dev",
+    "start": "netlify dev"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

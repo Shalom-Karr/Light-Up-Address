@@ -464,7 +464,7 @@
         netlify-honeypot="bot-field"
         action="/thanks.html"
         class="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-stone-200"
-        onsubmit="attachOrderRef(this)"
+        id="lumen-order-form"
       >
         <input type="hidden" name="form-name" value="lumen-order" />
         <input type="hidden" name="order-ref" id="order-ref-input" />
@@ -577,31 +577,66 @@
 
   <!-- FOOTER -->
   <footer class="py-12 px-6 bg-stone-900 text-stone-400 text-sm">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-6">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-400 to-red-500 flex items-center justify-center text-white font-bold text-xs">123</div>
-        <span class="font-display font-bold text-lg text-white">Lumen Address</span>
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between gap-6">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-400 to-red-500 flex items-center justify-center text-white font-bold text-xs">123</div>
+          <span class="font-display font-bold text-lg text-white">Lumen Address</span>
+        </div>
+        <div class="flex gap-6">
+          <a href="#why" class="hover:text-white">Why</a>
+          <a href="#how" class="hover:text-white">How</a>
+          <a href="#faq" class="hover:text-white">FAQ</a>
+          <a href="#order" class="hover:text-white">Order</a>
+        </div>
+        <p>&copy; 2026 Lumen Address. All rights reserved.</p>
       </div>
-      <div class="flex gap-6">
-        <a href="#why" class="hover:text-white">Why</a>
-        <a href="#how" class="hover:text-white">How</a>
-        <a href="#faq" class="hover:text-white">FAQ</a>
-        <a href="#order" class="hover:text-white">Order</a>
+      <div class="border-t border-stone-800 mt-8 pt-6 text-center text-xs text-stone-500">
+        Built by <a href="https://shalomkarr.pages.dev/" target="_blank" rel="noopener" class="font-semibold text-stone-300 hover:text-white underline-offset-4 hover:underline transition">Shalom Karr</a>
       </div>
-      <p>&copy; 2026 Lumen Address. All rights reserved.</p>
     </div>
   </footer>
 
   <script>
-    // Generate an order reference number before submit
-    function attachOrderRef(form) {
-      const ts = Math.floor(new Date('2026-06-01').getTime() / 1000).toString(36).toUpperCase().slice(-4);
-      const rand = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
-      const ref = 'LUM-' + rand + '-' + ts;
-      document.getElementById('order-ref-input').value = ref;
-      form.action = '/thanks.html?ref=' + encodeURIComponent(ref);
-      return true;
-    }
+    // On form submit: fetch a server-generated order ref from the Netlify
+    // Function, attach it to the form, then submit. Falls back to a
+    // client-generated ref if the function is unreachable.
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('lumen-order-form');
+      if (!form) return;
+      let submitting = false;
+
+      form.addEventListener('submit', async (e) => {
+        if (submitting) return;
+        e.preventDefault();
+        submitting = true;
+
+        const btn = form.querySelector('button[type="submit"]');
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Submitting…';
+
+        let ref;
+        try {
+          const res = await fetch('/api/order-ref', { method: 'GET' });
+          if (!res.ok) throw new Error('function returned ' + res.status);
+          const data = await res.json();
+          ref = data.ref;
+        } catch (err) {
+          // Client-side fallback so the form still works if the function fails
+          const rand = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+          const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+          const suffix = Array.from({ length: 3 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+          ref = 'LUM-' + rand + '-' + suffix;
+        }
+
+        document.getElementById('order-ref-input').value = ref;
+        form.action = '/thanks.html?ref=' + encodeURIComponent(ref);
+
+        // Submit natively now that the ref is attached
+        HTMLFormElement.prototype.submit.call(form);
+      });
+    });
   </script>
 
 </body>
