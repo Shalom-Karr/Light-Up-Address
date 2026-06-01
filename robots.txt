@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /thanks.html
 
-Sitemap: https://lumenaddress.com/sitemap.xml
+Sitemap: https://addressitled.com/sitemap.xml

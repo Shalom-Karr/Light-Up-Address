@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — AddressIt LED by Illumicor</title>
+  <meta name="description" content="Get in touch with AddressIt LED. Email htz.addressled@gmail.com or call Shmuly Neuman at 216.701.3492. Serving Cleveland Heights, University Heights, and Greater Cleveland, Ohio." />
+  <link rel="canonical" href="https://addressitled.com/contact.html" />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#1A3A6E', dark: '#0F2553', soft: '#2C4F87', 50: '#eef2f8' },
+            brandred: { DEFAULT: '#D8252E', dark: '#A91A22', soft: '#E84952', 50: '#fdebec' }
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+            display: ['Fraunces', 'ui-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-display { font-family: 'Fraunces', serif; letter-spacing: -0.02em; }
+    .gradient-text {
+      background: linear-gradient(135deg, #D8252E 0%, #1A3A6E 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeUp 0.7s ease-out both; }
+  </style>
+</head>
+<body class="bg-stone-50 text-navy-dark antialiased min-h-screen flex flex-col">
+
+  <!-- NAV -->
+  <nav class="bg-white/90 backdrop-blur-md border-b border-stone-200">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/logo.jpg" alt="AddressIt LED by Illumicor" class="h-12 w-auto" />
+      </a>
+      <div class="hidden md:flex items-center gap-7 text-sm font-semibold text-navy">
+        <a href="/#why" class="hover:text-brandred">Why</a>
+        <a href="/#gallery" class="hover:text-brandred">Gallery</a>
+        <a href="/#models" class="hover:text-brandred">Models</a>
+        <a href="/#faq" class="hover:text-brandred">FAQ</a>
+        <a href="/contact.html" class="text-brandred">Contact</a>
+      </div>
+      <a href="/#order" class="px-5 py-2.5 rounded-full bg-brandred text-white text-sm font-bold hover:bg-brandred-dark transition shadow-md">Order now</a>
+    </div>
+  </nav>
+
+  <main class="flex-1 px-6 py-16 md:py-24">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- HEADER -->
+      <div class="text-center mb-12 fade-in">
+        <p class="text-sm font-bold text-brandred uppercase tracking-wider mb-3">Get in touch</p>
+        <h1 class="font-display text-5xl md:text-6xl font-bold mb-4 text-navy-dark">
+          Let's <span class="gradient-text">talk.</span>
+        </h1>
+        <p class="text-lg text-stone-600 max-w-xl mx-auto">Questions about a custom sign? Want a recommendation for your home? Call, email, or send a quick note and we'll get back within one business day.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+
+        <!-- CONTACT FORM -->
+        <div class="fade-in">
+          <form
+            name="addressit-contact"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            action="/thanks.html?type=contact"
+            class="bg-white rounded-3xl p-8 shadow-xl border border-stone-200"
+          >
+            <input type="hidden" name="form-name" value="addressit-contact" />
+            <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+
+            <h2 class="font-display text-2xl font-bold mb-1 text-navy-dark">Send a message</h2>
+            <p class="text-sm text-stone-600 mb-6">We'll reply within one business day.</p>
+
+            <div class="space-y-5">
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Name</label>
+                <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Phone</label>
+                <input type="tel" name="phone" required class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Email</label>
+                <input type="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+              </div>
+              <div>
+                <label class="block text-sm font-bold mb-2 text-navy-dark">Message <span class="text-stone-400 font-normal">(optional)</span></label>
+                <textarea name="message" rows="4" placeholder="What's your question?" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition"></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="mt-7 w-full px-8 py-4 rounded-full bg-brandred text-white font-bold hover:bg-brandred-dark transition shadow-lg">
+              Send message →
+            </button>
+          </form>
+        </div>
+
+        <!-- DIRECT CONTACT -->
+        <div class="fade-in space-y-4">
+          <div class="bg-navy text-white rounded-3xl p-8 shadow-xl">
+            <p class="text-xs uppercase tracking-wider text-white/70 font-bold mb-2">Call us</p>
+            <p class="font-display text-3xl md:text-4xl font-bold mb-1">Shmuly Neuman</p>
+            <a href="tel:+12167013492" class="font-display text-2xl md:text-3xl font-bold text-brandred hover:text-brandred-soft transition">216.701.3492</a>
+            <p class="text-sm text-white/70 mt-4">Mon–Fri, business hours, Eastern Time.</p>
+          </div>
+
+          <a href="mailto:htz.addressled@gmail.com" class="block bg-brandred text-white rounded-3xl p-8 shadow-xl hover:bg-brandred-dark transition">
+            <p class="text-xs uppercase tracking-wider text-white/80 font-bold mb-2">Email us</p>
+            <p class="font-display text-xl md:text-2xl font-bold break-all">htz.addressled@gmail.com</p>
+            <p class="text-sm text-white/80 mt-4">We reply within one business day.</p>
+          </a>
+
+          <div class="bg-white rounded-3xl p-8 shadow-md border border-stone-200">
+            <p class="text-xs uppercase tracking-wider text-stone-500 font-bold mb-2">Serving</p>
+            <p class="font-display text-xl font-bold text-navy-dark mb-2">Greater Cleveland, OH</p>
+            <p class="text-sm text-stone-600">Cleveland Heights, University Heights, Shaker Heights, South Euclid, Beachwood, and all of Cuyahoga County.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-12 px-6 bg-navy-dark text-stone-300 text-sm">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid md:grid-cols-3 gap-8">
+        <div>
+          <p class="font-display font-bold text-2xl text-white">AddressIt <span class="text-brandred">LED</span></p>
+          <p class="text-xs text-stone-400 mt-1 uppercase tracking-wider">by Illumicor</p>
+          <p class="mt-4 text-stone-400 text-sm">When seconds count, be seen.</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-wider text-stone-400 font-bold mb-3">Contact</p>
+          <p class="mb-2"><a href="tel:+12167013492" class="hover:text-white">📞 Shmuly Neuman — 216.701.3492</a></p>
+          <p class="mb-2"><a href="mailto:htz.addressled@gmail.com" class="hover:text-white break-all">✉️ htz.addressled@gmail.com</a></p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-wider text-stone-400 font-bold mb-3">Site</p>
+          <div class="flex flex-col gap-2">
+            <a href="/#why" class="hover:text-white">Why it matters</a>
+            <a href="/#gallery" class="hover:text-white">Gallery</a>
+            <a href="/#models" class="hover:text-white">Models</a>
+            <a href="/#faq" class="hover:text-white">FAQ</a>
+            <a href="/#order" class="hover:text-white">Order</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs text-stone-500">
+        <p>&copy; 2026 Illumicor. All rights reserved.</p>
+        <p>Built by <a href="https://shalomkarr.pages.dev/" target="_blank" rel="noopener" class="font-semibold text-stone-300 hover:text-white underline-offset-4 hover:underline transition">Shalom Karr</a></p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

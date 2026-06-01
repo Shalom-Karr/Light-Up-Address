@@ -1,91 +1,135 @@
-# Lumen Address — Light-Up House Number Signs
+# AddressIt LED by Illumicor
 
-Single-page marketing/info site for solar-powered illuminated address signs. Visitors learn about the product, watch a hero video, and submit an order request form. Payment is handled separately by the manufacturer — this site is a lead-generation funnel for a commission-based referral arrangement, so no card data ever touches this site.
+Marketing/order site for **AddressIt LED** illuminated house number signs, manufactured by Illumicor. Lead-generation funnel: visitors learn about the product, customize an order, and submit. Illumicor (the merchant of record) contacts them to confirm and take payment by phone. The site never collects payment data.
 
-## What this site is
+Sales contact: **Shmuly Neuman** — 216.701.3492 — htz.addressled@gmail.com
 
-- **One page** (`index.html`) with hero video, why-it-matters, how-it-works, features, testimonial, FAQ, and order form
-- **A thank-you page** (`thanks.html`) that displays the visitor's unique order reference number after form submission
-- **No backend** — built with TailwindCSS via CDN, vanilla JS, and Netlify Forms for submissions
+## Pages
+
+| Page | Purpose |
+|---|---|
+| `index.html` | Product info, hero video, gallery, model lineup, FAQ, and the custom order form |
+| `contact.html` | Contact form (name / phone / email / message) + direct call/email options |
+| `thanks.html` | Post-submit confirmation. Shows order reference for orders, generic thanks for contact submissions |
+
+## Product families
+
+The order form supports both Illumicor product families. The form shows the relevant fields based on which family the visitor picks.
+
+### MDR Series — lit backplate signs
+Numbers (and optional street name) illuminated from behind on a backplate.
+
+| Model | Size | Style |
+|---|---|---|
+| MDR | 10" | Number only |
+| MDR-100 | 14" or 17" | Number only |
+| MDR-101 | 14" or 17" | Number + street name |
+| MDR-200 | 14" or 17" | Number with thin border |
+| MDR-301 | 14" or 17" | Number + street name with line |
+
+Options: background color (Black/White), font (Futura/Iowan Old), illumination color (White/Red), number position (Left/Center/Right).
+
+### IBL Series — 3D dimensional numbers
+Raised physical numbers in black, silver, or white finish.
+
+| Model | Size | Style |
+|---|---|---|
+| IBL-8 / 10 / 12 / 14 | 8"–14" | 3D single number |
+| IBLL-14 / 17 | 14" or 17" | 3D numbers on a line |
+| IBLP-14 / 17 | 14" or 17" | 3D numbers on a plate (Black or Silver) |
+
+Options: number color (Black/Silver/White), illumination color temperature (3000K Warm White / 4000K Day White / 6000K Cool White). For IBLP only: plate color (Black/Silver).
+
+### Both families
+Power option: Adaptor (plug-in) or Hard wired.
 
 ## Order flow
 
 ```
-Visitor watches video / reads info
+Visitor reads product info / sees gallery
         ↓
-Clicks "Order yours"
+Picks MDR or IBL family, customizes
         ↓
-Fills out order form (name, email, phone, address, house number, finish)
+Submits form via Netlify Forms (no card data)
         ↓
-Form submits via Netlify Forms (no card data collected)
+Netlify Function generates order ref (LUM-XXXXX-XXX style)
         ↓
-Thank-you page shows unique reference (e.g. LUM-48291-A7K2)
+Redirect to /thanks.html?ref=...
         ↓
-We forward the lead to the manufacturer
+Lead is forwarded to Illumicor (via Netlify Forms notification)
         ↓
-Manufacturer contacts customer to confirm + take payment directly
+Shmuly calls within 1 business day to confirm + take payment by phone
         ↓
-Charge appears on customer statement as "LUMEN ADDRESS LLC"
+Charge shows as "ILLUMICOR" on statement
         ↓
-We get commission per closed sale
+Sign is custom built and shipped
 ```
 
-## Why no payment on this site
+## Why no card fields on the site
 
-We're a referral / lead-gen partner, not a merchant of record. The manufacturer charges the customer directly. This keeps us entirely out of PCI DSS scope — no card data is ever collected, transmitted, or stored by this site. Customers see the manufacturer's name on their statement and deal with them for any payment questions or refunds.
+This site **does not collect payment card data**. Reasons:
 
-## Tech stack
+- **Netlify TOS** explicitly prohibits storing payment card data in Forms. Adding card fields → account banned.
+- **PCI DSS Requirement 3.2** categorically forbids storing the CVV after authorization. There is no compliant way to retain CVV in a form submission record.
+- **The moment a card number enters a form, the site operator becomes a PCI-scoped merchant** (regardless of who ultimately processes the charge). Compliance is impractical at this scale.
+- Illumicor's existing process — take payment by phone after callback — is already PCI-compliant for them and keeps the site out of scope entirely.
 
-| Concern | Choice | Notes |
-|---|---|---|
-| Hosting | Netlify | Static + built-in form handling |
-| Styling | TailwindCSS CDN | No build step |
-| Fonts | Google Fonts (Inter, Fraunces) | |
-| Video | Vimeo iframe embed | Swap `src` in `index.html` when real video is ready |
-| Forms | Netlify Forms | 100 submissions/mo free, $19/mo for 1,000 |
-| Spam | Netlify honeypot + Akismet | Built-in, no setup |
-| Order reference | Client-side generated, passed via URL param | Format: `LUM-XXXXX-XXXX` |
+If immediate self-service payment is desired in the future, the right options are:
+
+1. **Stripe Payment Link** — Illumicor creates a link, site buttons point to it, customer pays Illumicor directly. Zero PCI scope for this site.
+2. **Stripe Elements + Connect** — customer enters card in a Stripe-hosted iframe on the site, Stripe returns a tokenized payment method that Illumicor can charge. Raw card data never touches the site.
+
+## Tech
+
+- Static HTML, no build step
+- TailwindCSS via CDN (custom palette: navy `#1A3A6E` + red `#D8252E`)
+- Google Fonts: Inter, Fraunces
+- Vimeo iframe embed for hero video (placeholder — swap when real video is ready)
+- Netlify Forms for both order + contact forms
+- Netlify Function `netlify/functions/order-ref.mjs` generates sequential order refs via Netlify Blobs, served at `/api/order-ref`
 
 ## Files
 
 ```
-index.html        — main landing page
-thanks.html       — post-submit confirmation page with order reference
-netlify.toml      — Netlify build/redirect config
-README.md         — this file
+index.html                          — main landing page with order form
+contact.html                        — contact page with form + direct call/email
+thanks.html                         — post-submit confirmation page
+logo.jpg                            — AddressIt LED logo (navy/red)
+images/flyer.jpg                    — product marketing flyer
+images/example.jpg                  — MDR series product showcase
+images/examples.jpg                 — installed examples + color options
+netlify/functions/order-ref.mjs     — order ref generator
+netlify.toml                        — build/dev/function config
+package.json                        — pins @netlify/blobs
+robots.txt + sitemap.xml            — SEO basics
 ```
 
 ## Local development
 
-No build step. Open `index.html` directly in a browser, or serve the directory:
-
 ```sh
-# Python
-python -m http.server 8000
-
-# Node
-npx serve .
+npm install              # one-time, installs @netlify/blobs
+netlify login            # one-time
+netlify link             # one-time, link this repo to your Netlify site
+netlify dev              # serves the site + functions at http://localhost:8888
 ```
 
-Then open `http://localhost:8000`.
+Form submissions only land in the Netlify dashboard when deployed (or when running `netlify dev` linked to a real site). Test locally for layout/flow, deploy to verify end-to-end.
 
-Note: Netlify Forms won't work locally — submissions only register when deployed to Netlify. Test the form behavior locally, then deploy to verify end-to-end.
+## Pre-launch checklist
 
-## Deployment
+- [ ] Replace placeholder Vimeo embed URL with real product video
+- [ ] Connect repo to Netlify site (`netlify link`)
+- [ ] Set up form notification → forward leads to `htz.addressled@gmail.com` + a backup inbox
+- [ ] Buy and connect custom domain (e.g. `addressitled.com`)
+- [ ] Confirm statement descriptor with Illumicor (currently shown as `ILLUMICOR`)
+- [ ] Confirm warranty length on each model (currently 3 years across the board, per flyer)
+- [ ] Add real product photos for individual MDR models if available
+- [ ] Add real customer testimonials once we have them
 
-1. Push to GitHub (this repo).
-2. Connect the repo to Netlify (one-time setup).
-3. Netlify auto-deploys on every push to `main`.
-4. Verify form submissions land in the Netlify dashboard → Forms tab.
-5. Set up email notifications in Netlify → Forms → Notifications.
+## Repo
 
-## Configuration to do before launch
+GitHub: <https://github.com/Shalom-Karr/Light-Up-Address>
 
-- [ ] Replace placeholder Vimeo embed URL in `index.html` with real product video
-- [ ] Update product name, price, and copy (currently uses "Lumen Address" / $89 as placeholders)
-- [ ] Update statement descriptor on order form + thanks page (currently "LUMEN ADDRESS LLC")
-- [ ] Update contact email in `thanks.html` (currently `hello@lumenaddress.com`)
-- [ ] Confirm referral / commission terms with manufacturer
-- [ ] Set up Netlify form notification → forward leads to manufacturer + internal inbox
-- [ ] Add real testimonials once we have them
-- [ ] Connect custom domain in Netlify dashboard
+---
+
+Built by [Shalom Karr](https://shalomkarr.pages.dev/).
