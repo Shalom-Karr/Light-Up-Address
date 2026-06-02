@@ -94,7 +94,7 @@
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "5",
-      "reviewCount": "1",
+      "reviewCount": "2",
       "bestRating": "5",
       "worstRating": "1"
     },
@@ -105,6 +105,13 @@
         "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
         "reviewBody": "Address sign is fantastic!",
         "locationCreated": { "@type": "Place", "name": "Cleveland Heights, OH" }
+      },
+      {
+        "@type": "Review",
+        "author": { "@type": "Person", "name": "Max M." },
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "reviewBody": "Great visibility from the street and super bright at night. Highly recommended.",
+        "locationCreated": { "@type": "Place", "name": "University Heights, OH" }
       }
     ]
   }
@@ -597,29 +604,65 @@
 
   <!-- TESTIMONIAL -->
   <section class="py-24 px-6 bg-white">
-    <div class="max-w-3xl mx-auto text-center">
-      <p class="text-sm font-bold text-brandred uppercase tracking-wider mb-6">From our customers</p>
-
-      <div class="flex items-center justify-center gap-1 mb-7" aria-label="Rated 5 out of 5 stars">
-        <svg class="h-6 w-6 md:h-7 md:w-7 text-brandred drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
-        <svg class="h-6 w-6 md:h-7 md:w-7 text-brandred drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
-        <svg class="h-6 w-6 md:h-7 md:w-7 text-brandred drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
-        <svg class="h-6 w-6 md:h-7 md:w-7 text-brandred drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
-        <svg class="h-6 w-6 md:h-7 md:w-7 text-brandred drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <p class="text-sm font-bold text-brandred uppercase tracking-wider mb-3">From our customers</p>
+        <div class="flex items-center justify-center gap-1.5" aria-label="Average rating 5 out of 5">
+          <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+          <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+          <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+          <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+          <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+          <span class="ml-2 text-sm text-stone-500 font-semibold">5.0 from real customers</span>
+        </div>
       </div>
 
-      <svg class="mx-auto h-8 w-8 text-stone-300 mb-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.17 6C5.91 6 3.27 8.64 3.27 11.9c0 3.2 2.45 5.81 5.6 5.94L8.8 18a3.5 3.5 0 0 1-2.65-1.2 1 1 0 0 0-1.46 1.36A5.5 5.5 0 0 0 8.8 20h.37c4.05 0 6.96-3.16 6.96-7.85V11.9C16.13 8.64 13.5 6 10.24 6h-1.07zm10 0c-3.26 0-5.9 2.64-5.9 5.9 0 3.2 2.45 5.81 5.6 5.94L18.8 18a3.5 3.5 0 0 1-2.65-1.2 1 1 0 1 0-1.46 1.36A5.5 5.5 0 0 0 18.8 20h.37c4.05 0 6.96-3.16 6.96-7.85V11.9C26.13 8.64 23.5 6 20.24 6h-1.07z"/></svg>
+      <div class="grid md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
 
-      <blockquote class="font-display text-3xl md:text-4xl font-semibold leading-tight mb-7 text-navy-dark">
-        "Address sign is fantastic!"
-      </blockquote>
+        <!-- Review 1: MK -->
+        <figure class="relative bg-stone-50 border border-stone-200 rounded-3xl p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow">
+          <svg class="absolute top-6 right-6 h-10 w-10 text-stone-200" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.17 6C5.91 6 3.27 8.64 3.27 11.9c0 3.2 2.45 5.81 5.6 5.94L8.8 18a3.5 3.5 0 0 1-2.65-1.2 1 1 0 0 0-1.46 1.36A5.5 5.5 0 0 0 8.8 20h.37c4.05 0 6.96-3.16 6.96-7.85V11.9C16.13 8.64 13.5 6 10.24 6h-1.07zm10 0c-3.26 0-5.9 2.64-5.9 5.9 0 3.2 2.45 5.81 5.6 5.94L18.8 18a3.5 3.5 0 0 1-2.65-1.2 1 1 0 1 0-1.46 1.36A5.5 5.5 0 0 0 18.8 20h.37c4.05 0 6.96-3.16 6.96-7.85V11.9C26.13 8.64 23.5 6 20.24 6h-1.07z"/></svg>
+          <div class="flex items-center gap-1 mb-5" aria-label="Rated 5 out of 5 stars">
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+          </div>
+          <blockquote class="font-display text-2xl md:text-3xl font-semibold leading-snug mb-6 text-navy-dark">
+            "Address sign is fantastic!"
+          </blockquote>
+          <figcaption class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brandred to-navy text-white font-bold text-sm">MK</div>
+            <div>
+              <p class="font-semibold text-navy-dark text-sm">MK</p>
+              <p class="text-xs text-stone-500">Cleveland Heights, OH</p>
+            </div>
+          </figcaption>
+        </figure>
 
-      <div class="inline-flex items-center gap-3">
-        <span class="h-px w-8 bg-stone-300"></span>
-        <p class="text-stone-600 font-semibold tracking-wide">
-          MK<span class="text-stone-400 font-normal">, Cleveland Heights</span>
-        </p>
-        <span class="h-px w-8 bg-stone-300"></span>
+        <!-- Review 2: Max M. -->
+        <figure class="relative bg-stone-50 border border-stone-200 rounded-3xl p-8 md:p-10 shadow-sm hover:shadow-md transition-shadow">
+          <svg class="absolute top-6 right-6 h-10 w-10 text-stone-200" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.17 6C5.91 6 3.27 8.64 3.27 11.9c0 3.2 2.45 5.81 5.6 5.94L8.8 18a3.5 3.5 0 0 1-2.65-1.2 1 1 0 0 0-1.46 1.36A5.5 5.5 0 0 0 8.8 20h.37c4.05 0 6.96-3.16 6.96-7.85V11.9C16.13 8.64 13.5 6 10.24 6h-1.07zm10 0c-3.26 0-5.9 2.64-5.9 5.9 0 3.2 2.45 5.81 5.6 5.94L18.8 18a3.5 3.5 0 0 1-2.65-1.2 1 1 0 1 0-1.46 1.36A5.5 5.5 0 0 0 18.8 20h.37c4.05 0 6.96-3.16 6.96-7.85V11.9C26.13 8.64 23.5 6 20.24 6h-1.07z"/></svg>
+          <div class="flex items-center gap-1 mb-5" aria-label="Rated 5 out of 5 stars">
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+            <svg class="h-5 w-5 text-brandred" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/></svg>
+          </div>
+          <blockquote class="font-display text-2xl md:text-3xl font-semibold leading-snug mb-6 text-navy-dark">
+            "Great visibility from the street and super bright at night. Highly recommended."
+          </blockquote>
+          <figcaption class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-navy to-brandred text-white font-bold text-sm">MM</div>
+            <div>
+              <p class="font-semibold text-navy-dark text-sm">Max M.</p>
+              <p class="text-xs text-stone-500">University Heights, OH</p>
+            </div>
+          </figcaption>
+        </figure>
+
       </div>
     </div>
   </section>
