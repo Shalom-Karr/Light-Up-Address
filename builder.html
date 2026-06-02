@@ -289,11 +289,12 @@
       <a href="/" class="flex items-center gap-3">
         <img src="/logo.jpg" alt="AddressIt LED by Illumicor" class="h-12 w-auto" />
       </a>
-      <div class="hidden md:flex items-center gap-7 text-sm font-semibold text-navy">
+      <div class="hidden md:flex items-center gap-6 text-sm font-semibold text-navy">
         <a href="/#why" class="hover:text-brandred">Why</a>
         <a href="/#gallery" class="hover:text-brandred">Gallery</a>
         <a href="/#models" class="hover:text-brandred">Models</a>
         <a href="/builder.html" class="text-brandred">Build a sign</a>
+        <a href="/pricing.html" class="hover:text-brandred">Pricing</a>
         <a href="/contact.html" class="hover:text-brandred">Contact</a>
       </div>
       <a href="/#order" class="px-5 py-2.5 rounded-full bg-brandred text-white text-sm font-bold hover:bg-brandred-dark transition shadow-md">Order now</a>
@@ -486,6 +487,11 @@
             <p class="text-xs font-bold text-brandred uppercase tracking-wider mb-2">Your recommended SKU</p>
             <p class="font-display text-5xl md:text-6xl font-bold mb-2"><span id="rec-model">MDR-100</span></p>
             <p class="text-lg text-white/80 mb-4"><span id="rec-family">MDR Series</span> · <span id="rec-size">14"</span></p>
+            <div class="mb-4 inline-block">
+              <p class="text-xs font-bold text-white/60 uppercase tracking-wider mb-1">Price</p>
+              <p class="font-display text-4xl font-bold text-brandred-50"><span id="rec-price">$125</span></p>
+              <p class="text-xs text-white/60 mt-1">Plus shipping. Installation not included.</p>
+            </div>
             <p class="text-sm text-white/70" id="rec-explanation"></p>
           </div>
           <div>
@@ -499,9 +505,18 @@
         </div>
       </div>
 
+      <!-- INSTALLATION NOTICE -->
+      <div class="mt-6 p-5 rounded-2xl bg-navy-50 border border-navy/15 flex items-start gap-4">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-navy text-white flex items-center justify-center text-lg">🔧</div>
+        <div class="flex-1">
+          <p class="font-bold text-navy-dark">Need installation?</p>
+          <p class="text-sm text-stone-700 mt-1">Installation cost varies. Reach out and we'll have a rep come out and quote you. <a href="/contact.html" class="font-bold text-brandred hover:underline">Request a quote →</a></p>
+        </div>
+      </div>
+
       <!-- DISCLAIMER -->
       <p class="text-center text-xs text-stone-500 mt-6 max-w-2xl mx-auto">
-        Final SKU and price will be confirmed by Illumicor when they call to take payment. The recommendation here is based on your visual choices and follows the same model logic as the paper order form.
+        Final SKU and price will be confirmed by Illumicor when they call to take payment. Prices shown reflect the 2026 Illumicor price list. <a href="/pricing.html" class="font-semibold underline">See full pricing →</a>
       </p>
     </div>
   </main>
@@ -539,6 +554,28 @@
   </footer>
 
   <script>
+  // ====== Pricing (from Illumicor 2026 price list) ======
+  const PRICES = {
+    'MDR':       { '10"': 95 },
+    'MDR-100':   { '14"': 125, '17"': 135 },
+    'MDR-101':   { '14"': 135, '17"': 145 },
+    'MDR-200':   { '14"': 135, '17"': 145 },
+    'MDR-301':   { '14"': 135, '17"': 145 },
+    'IBL-8':     { '8"':  110 },
+    'IBL-10':    { '10"': 120 },
+    'IBL-12':    { '12"': 130 },
+    'IBL-14':    { '14"': 145 },
+    'IBLL-14':   { '14"': 135 },
+    'IBLL-17':   { '17"': 145 },
+    'IBLP-14':   { '14"': 135 },
+    'IBLP-17':   { '17"': 145 },
+  };
+  function priceFor(model, size) {
+    const m = PRICES[model];
+    if (!m) return null;
+    return m[size] ?? null;
+  }
+
   // ====== Recommendation engine ======
   /**
    * @param {Object} state visual builder selections
@@ -714,6 +751,8 @@
     document.getElementById('rec-family').textContent = rec.family === 'MDR' ? 'MDR Series' : 'IBL Series';
     document.getElementById('rec-size').textContent = rec.size;
     document.getElementById('rec-explanation').textContent = rec.explanation;
+    const price = priceFor(rec.model, rec.size);
+    document.getElementById('rec-price').textContent = price !== null ? `$${price}` : 'Quote on request';
 
     const niceKey = k => k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     const cfgHtml = Object.entries(rec.config).map(([k, v]) =>
