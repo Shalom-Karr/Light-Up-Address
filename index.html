@@ -1300,8 +1300,85 @@
             return false;
           }
         }
+
+        // Additional payment validations on step 4
+        if (stepNum === 4) {
+          const provider = form.querySelector('select[name="cc-provider"]');
+          const cvvField = form.querySelector('input[name="cc-cvv"]');
+          const expField = form.querySelector('input[name="cc-expiration"]');
+
+          // CVV validation: 4 digits for Amex, 3 digits for others
+          if (cvvField && provider) {
+            const cvv = cvvField.value.trim();
+            const isAmex = provider.value === 'American Express';
+            const requiredLen = isAmex ? 4 : 3;
+            const cvvRegex = isAmex ? /^\d{4}$/ : /^\d{3}$/;
+            if (!cvvRegex.test(cvv)) {
+              cvvField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              cvvField.focus();
+              highlightInvalid(cvvField);
+              alert('Please enter a valid ' + requiredLen + '-digit CVV.');
+              return false;
+            }
+          }
+
+          // Expiration validation: MM/YY format and not expired
+          if (expField) {
+            const expVal = expField.value.trim();
+            const expMatch = expVal.match(/^(0[1-9]|1[0-2])\/(\d{2})$/);
+            if (!expMatch) {
+              expField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              expField.focus();
+              highlightInvalid(expField);
+              alert('Please enter a valid expiration date in MM/YY format.');
+              return false;
+            }
+            const expMonth = parseInt(expMatch[1], 10);
+            const expYear = parseInt(expMatch[2], 10) + 2000;
+            const now = new Date();
+            const currentMonth = now.getMonth() + 1;
+            const currentYear = now.getFullYear();
+            if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+              expField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              expField.focus();
+              highlightInvalid(expField);
+              alert('Your card has expired. Please use a valid card.');
+              return false;
+            }
+          }
+        }
+
         return true;
       }
+
+      // Auto-format expiration input (add slash after MM)
+      (function() {
+        const expInput = document.getElementById('cc-expiration');
+        if (!expInput) return;
+        expInput.addEventListener('input', function(e) {
+          let val = this.value.replace(/[^\d]/g, '');
+          if (val.length >= 2) {
+            val = val.substring(0, 2) + '/' + val.substring(2, 4);
+          }
+          this.value = val;
+        });
+      })();
+
+      // Update CVV maxlength and placeholder based on card provider
+      (function() {
+        const providerSelect = document.getElementById('cc-provider');
+        const cvvInput = document.getElementById('cc-cvv');
+        if (!providerSelect || !cvvInput) return;
+        providerSelect.addEventListener('change', function() {
+          const isAmex = this.value === 'American Express';
+          cvvInput.maxLength = isAmex ? 4 : 3;
+          cvvInput.placeholder = isAmex ? '1234' : '123';
+          // Clear CVV if it exceeds new max length
+          if (cvvInput.value.length > cvvInput.maxLength) {
+            cvvInput.value = cvvInput.value.substring(0, cvvInput.maxLength);
+          }
+        });
+      })();
 
       // -------- Step navigation --------
       function showStep(n, scroll = true) {
