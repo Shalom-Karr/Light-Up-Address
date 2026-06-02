@@ -10,6 +10,12 @@
   publish = "."
 
 [[redirects]]
+  from = "https://addressitled.netlify.app/*"
+  to = "https://addressitled.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
