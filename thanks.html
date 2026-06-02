@@ -122,11 +122,22 @@
   </main>
 
   <footer class="py-8 px-6 bg-navy-dark text-stone-400 text-sm">
-    <div class="max-w-6xl mx-auto text-center space-y-3">
-      <p>&copy; 2026 Illumicor. All rights reserved.</p>
-      <p class="text-xs text-stone-500">
-        Built by <a href="https://shalomkarr.pages.dev/" target="_blank" rel="noopener" class="font-semibold text-stone-300 hover:text-white underline-offset-4 hover:underline transition">Shalom Karr</a>
-      </p>
+    <div class="max-w-6xl mx-auto flex flex-col items-center gap-4 text-center">
+      <p class="text-xs text-stone-500">&copy; 2026 Illumicor. All rights reserved.</p>
+      <a href="https://shalomkarr.pages.dev/" target="_blank" rel="noopener"
+         class="group inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-stone-400 hover:text-white text-xs transition-colors">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-3.5 w-3.5 text-brandred-soft group-hover:text-brandred transition-colors">
+          <path d="M12 2l2.39 7.36H22l-6.18 4.49 2.36 7.36L12 16.71l-6.18 4.5 2.36-7.36L2 9.36h7.61L12 2z"/>
+        </svg>
+        <span class="tracking-wide">Built by</span>
+        <span class="relative font-display italic font-semibold text-stone-100">
+          Shalom Karr
+          <span aria-hidden="true" class="pointer-events-none absolute inset-x-0 -bottom-0.5 h-px bg-gradient-to-r from-brandred via-brandred-soft to-navy-soft origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true">
+          <path d="M7 17L17 7M7 7h10v10"/>
+        </svg>
+      </a>
     </div>
   </footer>
 
