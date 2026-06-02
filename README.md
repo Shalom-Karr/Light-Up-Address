@@ -2,15 +2,20 @@
 
 Marketing/order site for **AddressIt LED** illuminated house number signs, manufactured by Illumicor. Lead-generation funnel: visitors learn about the product, customize an order, and submit. Illumicor (the merchant of record) contacts them to confirm and take payment by phone. The site never collects payment data.
 
-Sales contact: **Shmuly Neuman** — 216.701.3492 — htz.addressled@gmail.com
+**Live:** https://addressitled.com  
+**Sales contact:** Shmuly Neuman — 216.701.3492 — htz.addressled@gmail.com
 
 ## Pages
 
 | Page | Purpose |
 |---|---|
-| `index.html` | Product info, hero video, gallery, model lineup, FAQ, and the custom order form |
-| `contact.html` | Contact form (name / phone / email / message) + direct call/email options |
-| `thanks.html` | Post-submit confirmation. Shows order reference for orders, generic thanks for contact submissions |
+| `index.html` | Hero, product info, demo video, gallery, model lineup, FAQ, custom order form |
+| `pricing.html` | Full 2026 price list — every SKU with prices |
+| `builder.html` | Visual sign builder — pick style/color/size and get the SKU to order |
+| `contact.html` | Contact form + direct call/email |
+| `thanks.html` | Post-submit confirmation. Shows order reference for orders, generic thanks for contact |
+
+All pages share: fixed nav with logo + page links + mobile hamburger drawer; navy/red footer with brand, contact, internal links, and other pages.
 
 ## Product families
 
@@ -48,13 +53,15 @@ Power option: Adaptor (plug-in) or Hard wired.
 ```
 Visitor reads product info / sees gallery
         ↓
+(Optional) opens /builder.html to design visually
+        ↓
 Picks MDR or IBL family, customizes
         ↓
 Enters payment details (card provider, number, expiration, CVV)
         ↓
 Submits form via Netlify Forms
         ↓
-Netlify Function generates order ref (LUM-XXXXX-XXX style)
+Netlify Function generates order ref (AIL-XXXXX-XXX style)
         ↓
 Redirect to /thanks.html?ref=...
         ↓
@@ -71,29 +78,50 @@ Sign is custom built and shipped
 
 Payment card details are collected on the order form (Step 4). The card is charged after Illumicor confirms the order.
 
+## Hosting & DNS
+
+- **Hosted on Netlify** (site ID `4a3b4bf7-b57e-4344-a63f-b7fe0de66cb1`, project `addressitled`)
+- **Custom domain** `addressitled.com` — apex CNAME on Cloudflare → `apex-loadbalancer.netlify.com` (DNS-only / gray cloud)
+- **SSL** Let's Encrypt cert covering both `addressitled.com` + `www.addressitled.com`, auto-renewed by Netlify
+- `addressitled.netlify.app` redirects to `addressitled.com` via `netlify.toml` redirect rule
+- DNS is on **Cloudflare** (not Netlify DNS), proxy off
+
 ## Tech
 
 - Static HTML, no build step
 - TailwindCSS via CDN (custom palette: navy `#1A3A6E` + red `#D8252E`)
-- Google Fonts: Inter, Fraunces
-- Vimeo iframe embed for hero video (placeholder — swap when real video is ready)
-- Netlify Forms for both order + contact forms
+- Google Fonts: Inter (sans) + Fraunces (display serif)
+- Vanilla JS for: order-form steps, mobile hamburger menu, visual builder canvas, hero video click-to-play
+- Self-hosted demo video at `/videos/demo.mp4`
+- Netlify Forms for both order + contact forms (no card data — see above)
 - Netlify Function `netlify/functions/order-ref.mjs` generates sequential order refs via Netlify Blobs, served at `/api/order-ref`
+
+## SEO
+
+- `sitemap.xml` + `robots.txt` at repo root
+- Each page has JSON-LD: `Product` + `AggregateOffer` (with real review/aggregateRating on `index.html`) + `BreadcrumbList`
+- Open Graph + Twitter Card meta on every page
+- **Google:** submitted via Google Search Console
+- **Bing/Yahoo/DuckDuckGo/Ecosia:** submitted via IndexNow — key file at `/{key}.txt` in repo root; re-submit any time with a POST to `https://api.indexnow.org/IndexNow` (see "Re-submitting to IndexNow" below)
 
 ## Files
 
 ```
 index.html                          — main landing page with order form
+pricing.html                        — full 2026 price list
+builder.html                        — visual sign builder
 contact.html                        — contact page with form + direct call/email
 thanks.html                         — post-submit confirmation page
 logo.jpg                            — AddressIt LED logo (navy/red)
 images/flyer.jpg                    — product marketing flyer
 images/example.jpg                  — MDR series product showcase
 images/examples.jpg                 — installed examples + color options
-netlify/functions/order-ref.mjs     — order ref generator
-netlify.toml                        — build/dev/function config
+videos/demo.mp4                     — self-hosted hero demo video
+netlify/functions/order-ref.mjs     — order ref generator (Netlify Blobs)
+netlify.toml                        — build/dev/function config + .netlify.app → .com redirect
 package.json                        — pins @netlify/blobs
 robots.txt + sitemap.xml            — SEO basics
+{key}.txt                           — IndexNow verification key file (do not delete)
 ```
 
 ## Local development
@@ -101,26 +129,37 @@ robots.txt + sitemap.xml            — SEO basics
 ```sh
 npm install              # one-time, installs @netlify/blobs
 netlify login            # one-time
-netlify link             # one-time, link this repo to your Netlify site
+netlify link             # one-time, link this repo to the Netlify site
 netlify dev              # serves the site + functions at http://localhost:8888
 ```
 
 Form submissions only land in the Netlify dashboard when deployed (or when running `netlify dev` linked to a real site). Test locally for layout/flow, deploy to verify end-to-end.
 
-## Pre-launch checklist
+## Re-submitting to IndexNow
 
-- [ ] Replace placeholder Vimeo embed URL with real product video
-- [ ] Connect repo to Netlify site (`netlify link`)
-- [ ] Set up form notification → forward leads to `htz.addressled@gmail.com` + a backup inbox
-- [ ] Buy and connect custom domain (e.g. `addressitled.com`)
-- [ ] Confirm statement descriptor with Illumicor (currently shown as `ILLUMICOR`)
-- [ ] Confirm warranty length on each model (currently 3 years across the board, per flyer)
-- [ ] Add real product photos for individual MDR models if available
-- [ ] Add real customer testimonials once we have them
+When pages change or new ones are added, ping IndexNow so Bing/Yahoo/DuckDuckGo re-crawl:
+
+```powershell
+$key = (Get-ChildItem -Path . -Filter "*.txt" | Where-Object { $_.BaseName.Length -ge 32 } | Select-Object -First 1).BaseName
+$body = @{
+  host = "addressitled.com"
+  key = $key
+  keyLocation = "https://addressitled.com/$key.txt"
+  urlList = @(
+    "https://addressitled.com/",
+    "https://addressitled.com/pricing.html",
+    "https://addressitled.com/builder.html",
+    "https://addressitled.com/contact.html"
+  )
+} | ConvertTo-Json
+Invoke-WebRequest -Uri "https://api.indexnow.org/IndexNow" -Method POST -Body $body -ContentType "application/json; charset=utf-8"
+```
+
+HTTP 200/202 = accepted.
 
 ## Repo
 
-GitHub: <https://github.com/Shalom-Karr/Light-Up-Address>
+GitHub: <https://github.com/Shalom-Karr/AddressItLED>
 
 ---
 
