@@ -50,7 +50,9 @@ Visitor reads product info / sees gallery
         ↓
 Picks MDR or IBL family, customizes
         ↓
-Submits form via Netlify Forms (no card data)
+Enters payment details (card provider, number, expiration, CVV)
+        ↓
+Submits form via Netlify Forms
         ↓
 Netlify Function generates order ref (LUM-XXXXX-XXX style)
         ↓
@@ -58,26 +60,16 @@ Redirect to /thanks.html?ref=...
         ↓
 Lead is forwarded to Illumicor (via Netlify Forms notification)
         ↓
-Shmuly calls within 1 business day to confirm + take payment by phone
+Card is charged after order confirmation
         ↓
 Charge shows as "ILLUMICOR" on statement
         ↓
 Sign is custom built and shipped
 ```
 
-## Why no card fields on the site
+## Payment collection
 
-This site **does not collect payment card data**. Reasons:
-
-- **Netlify TOS** explicitly prohibits storing payment card data in Forms. Adding card fields → account banned.
-- **PCI DSS Requirement 3.2** categorically forbids storing the CVV after authorization. There is no compliant way to retain CVV in a form submission record.
-- **The moment a card number enters a form, the site operator becomes a PCI-scoped merchant** (regardless of who ultimately processes the charge). Compliance is impractical at this scale.
-- Illumicor's existing process — take payment by phone after callback — is already PCI-compliant for them and keeps the site out of scope entirely.
-
-If immediate self-service payment is desired in the future, the right options are:
-
-1. **Stripe Payment Link** — Illumicor creates a link, site buttons point to it, customer pays Illumicor directly. Zero PCI scope for this site.
-2. **Stripe Elements + Connect** — customer enters card in a Stripe-hosted iframe on the site, Stripe returns a tokenized payment method that Illumicor can charge. Raw card data never touches the site.
+Payment card details are collected on the order form (Step 4). The card is charged after Illumicor confirms the order.
 
 ## Tech
 
