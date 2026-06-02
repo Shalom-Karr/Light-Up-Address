@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Build Your Sign — AddressIt LED by Illumicor</title>
+  <meta name="description" content="Design your AddressIt LED sign visually — pick style, color, illumination, and size. We'll tell you exactly which SKU to order." />
+  <link rel="canonical" href="https://addressitled.com/builder.html" />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#1A3A6E', dark: '#0F2553', soft: '#2C4F87', 50: '#eef2f8' },
+            brandred: { DEFAULT: '#D8252E', dark: '#A91A22', soft: '#E84952', 50: '#fdebec' }
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+            display: ['Fraunces', 'ui-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-display { font-family: 'Fraunces', serif; letter-spacing: -0.02em; }
+    .gradient-text {
+      background: linear-gradient(135deg, #D8252E 0%, #1A3A6E 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    /* ===== night-backdrop stage ===== */
+    .sign-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 460px;
+      padding: 64px 32px;
+      background:
+        radial-gradient(ellipse at 50% 30%, #1a2942 0%, #0b1326 55%, #05080f 100%);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .sign-stage::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 28px);
+      pointer-events: none;
+    }
+
+    /* ===== MDR (lit backplate) ===== */
+    .sign-mdr {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 28px 40px;
+      border-radius: 6px;
+      aspect-ratio: 16 / 9;
+      min-width: 280px;
+      transition: all 0.35s ease;
+    }
+    .sign-mdr--bg-black {
+      background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .sign-mdr--bg-white {
+      background: linear-gradient(180deg, #f4f1ea 0%, #d9d4c7 100%);
+      border: 1px solid #b8b2a4;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    .sign-mdr__num {
+      font-size: clamp(72px, 14vw, 180px);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+    .sign-mdr--font-futura .sign-mdr__num { font-family: 'Inter', 'Futura', sans-serif; font-weight: 800; }
+    .sign-mdr--font-iowan  .sign-mdr__num { font-family: 'Fraunces', 'Iowan Old Style', Georgia, serif; font-weight: 700; }
+    .sign-mdr--size-10 { transform: scale(0.75); }
+    .sign-mdr--size-14 { transform: scale(1.00); }
+    .sign-mdr--size-17 { transform: scale(1.25); }
+    .sign-mdr--pos-left   { align-items: flex-start; text-align: left; }
+    .sign-mdr--pos-center { align-items: center;     text-align: center; }
+    .sign-mdr--pos-right  { align-items: flex-end;   text-align: right; }
+    .sign-mdr--illum-white .sign-mdr__num {
+      color: #fffef5;
+      text-shadow:
+        0 0 4px  #ffffff,
+        0 0 10px #ffffff,
+        0 0 22px rgba(255,255,240,0.95),
+        0 0 42px rgba(255,250,220,0.85),
+        0 0 72px rgba(255,245,200,0.65),
+        0 0 110px rgba(255,240,180,0.45);
+    }
+    .sign-mdr--illum-white.sign-mdr--bg-black {
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.04),
+        0 0 60px rgba(255,245,210,0.25),
+        0 0 120px rgba(255,240,190,0.18);
+    }
+    .sign-mdr--illum-red .sign-mdr__num {
+      color: #ffd9d6;
+      text-shadow:
+        0 0 4px  #ff6a60,
+        0 0 10px #ff2a1e,
+        0 0 22px rgba(255,40,30,0.95),
+        0 0 42px rgba(216,37,46,0.85),
+        0 0 72px rgba(200,20,28,0.65),
+        0 0 110px rgba(170,10,18,0.45);
+    }
+    .sign-mdr--illum-red.sign-mdr--bg-black {
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.04),
+        0 0 60px rgba(216,37,46,0.30),
+        0 0 130px rgba(216,37,46,0.20);
+    }
+    .sign-mdr__street {
+      margin: 14px 0 0;
+      font-size: clamp(11px, 1.6vw, 18px);
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.92;
+    }
+    .sign-mdr--illum-white .sign-mdr__street {
+      color: #fffef5;
+      text-shadow: 0 0 4px #fff, 0 0 12px rgba(255,250,220,0.7);
+    }
+    .sign-mdr--illum-red .sign-mdr__street {
+      color: #ffd0cc;
+      text-shadow: 0 0 4px #ff5a50, 0 0 12px rgba(216,37,46,0.7);
+    }
+    .sign-mdr__street:empty { display: none; }
+
+    /* ===== IBL (3D numbers) ===== */
+    .sign-ibl {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 56px;
+      transition: all 0.35s ease;
+    }
+    .sign-ibl__num {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-weight: 900;
+      font-size: clamp(72px, 14vw, 180px);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin: 0;
+      position: relative;
+      z-index: 2;
+    }
+    .sign-ibl--size-8  { transform: scale(0.65); }
+    .sign-ibl--size-10 { transform: scale(0.80); }
+    .sign-ibl--size-12 { transform: scale(1.00); }
+    .sign-ibl--size-14 { transform: scale(1.18); }
+    .sign-ibl--size-17 { transform: scale(1.40); }
+    .ibl-num--black .sign-ibl__num {
+      color: #1a1a1a;
+      text-shadow:
+        1px 1px 0 #0d0d0d, 2px 2px 0 #0a0a0a, 3px 3px 0 #080808,
+        4px 4px 0 #050505, 5px 5px 0 #030303, 6px 6px 0 #020202,
+        7px 7px 0 #000, 8px 8px 14px rgba(0,0,0,0.85);
+    }
+    .ibl-num--silver .sign-ibl__num {
+      background: linear-gradient(180deg, #f6f6f6 0%, #c8c8cc 45%, #8a8a90 55%, #d8d8dc 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      text-shadow:
+        1px 1px 0 rgba(120,120,128,0.9),
+        2px 2px 0 rgba(95,95,100,0.85),
+        3px 3px 0 rgba(70,70,75,0.8),
+        4px 4px 0 rgba(50,50,55,0.75),
+        5px 5px 0 rgba(35,35,40,0.7),
+        6px 6px 0 rgba(20,20,25,0.65),
+        8px 8px 16px rgba(0,0,0,0.7);
+      filter: drop-shadow(0 2px 1px rgba(255,255,255,0.15));
+    }
+    .ibl-num--white .sign-ibl__num {
+      color: #f5f3ec;
+      text-shadow:
+        1px 1px 0 #d8d4c8, 2px 2px 0 #b8b3a4, 3px 3px 0 #969080,
+        4px 4px 0 #6e6a5c, 5px 5px 0 #4a473d, 6px 6px 0 #2e2c25,
+        7px 7px 0 #15140f, 8px 8px 16px rgba(0,0,0,0.75);
+    }
+    .sign-ibl-single { background: transparent; }
+    .sign-ibl-line .sign-ibl__num { padding-bottom: 18px; }
+    .sign-ibl-line::after {
+      content: "";
+      position: absolute;
+      left: 12%; right: 12%; bottom: 32px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #6a7388 20%, #8892a8 50%, #6a7388 80%, transparent);
+      border-radius: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+    .sign-ibl-plate { padding: 36px 56px; border-radius: 8px; }
+    .sign-ibl-plate.ibl-plate--black {
+      background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .sign-ibl-plate.ibl-plate--silver {
+      background: linear-gradient(180deg, #d8d8dc 0%, #9a9aa0 50%, #c0c0c6 100%);
+      border: 1px solid #6e6e74;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+    .ibl-illum--3000k .sign-ibl__num {
+      filter:
+        drop-shadow(0 0 8px  rgba(255,170,80,0.85))
+        drop-shadow(0 0 22px rgba(255,150,60,0.7))
+        drop-shadow(0 0 48px rgba(255,140,50,0.5));
+    }
+    .ibl-illum--4000k .sign-ibl__num {
+      filter:
+        drop-shadow(0 0 8px  rgba(255,250,235,0.9))
+        drop-shadow(0 0 22px rgba(255,245,220,0.7))
+        drop-shadow(0 0 48px rgba(255,240,210,0.5));
+    }
+    .ibl-illum--6000k .sign-ibl__num {
+      filter:
+        drop-shadow(0 0 8px  rgba(200,225,255,0.9))
+        drop-shadow(0 0 22px rgba(170,210,255,0.7))
+        drop-shadow(0 0 48px rgba(140,195,255,0.5));
+    }
+
+    /* ===== Control chips ===== */
+    .chip {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 2px solid #e7e5e4;
+      background: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #44403c;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip:hover { border-color: #1A3A6E; }
+    .chip.active {
+      background: #1A3A6E;
+      border-color: #1A3A6E;
+      color: white;
+    }
+    .chip--red.active {
+      background: #D8252E;
+      border-color: #D8252E;
+    }
+
+    .swatch {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3px solid #e7e5e4;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .swatch.active { border-color: #1A3A6E; transform: scale(1.1); }
+
+    /* ===== Recommendation card ===== */
+    @keyframes pulseRec {
+      0%, 100% { box-shadow: 0 10px 40px rgba(216, 37, 46, 0.2); }
+      50% { box-shadow: 0 10px 50px rgba(216, 37, 46, 0.35); }
+    }
+    .rec-card { animation: pulseRec 3s ease-in-out infinite; }
+  </style>
+</head>
+
+<body class="bg-stone-50 text-navy-dark antialiased">
+
+  <!-- NAV -->
+  <nav class="bg-white/90 backdrop-blur-md border-b border-stone-200">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/logo.jpg" alt="AddressIt LED by Illumicor" class="h-12 w-auto" />
+      </a>
+      <div class="hidden md:flex items-center gap-7 text-sm font-semibold text-navy">
+        <a href="/#why" class="hover:text-brandred">Why</a>
+        <a href="/#gallery" class="hover:text-brandred">Gallery</a>
+        <a href="/#models" class="hover:text-brandred">Models</a>
+        <a href="/builder.html" class="text-brandred">Build a sign</a>
+        <a href="/contact.html" class="hover:text-brandred">Contact</a>
+      </div>
+      <a href="/#order" class="px-5 py-2.5 rounded-full bg-brandred text-white text-sm font-bold hover:bg-brandred-dark transition shadow-md">Order now</a>
+    </div>
+  </nav>
+
+  <main class="py-12 px-6">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- HEADER -->
+      <div class="text-center mb-10">
+        <p class="text-sm font-bold text-brandred uppercase tracking-wider mb-3">Visual builder</p>
+        <h1 class="font-display text-4xl md:text-6xl font-bold mb-3 text-navy-dark">
+          Design your <span class="gradient-text">sign.</span>
+        </h1>
+        <p class="text-lg text-stone-600 max-w-2xl mx-auto">Pick your style, color, and size. We'll tell you exactly which SKU to order.</p>
+      </div>
+
+      <!-- BUILDER GRID -->
+      <div class="grid lg:grid-cols-5 gap-6 mb-8">
+
+        <!-- PREVIEW (left 2 cols on lg) -->
+        <div class="lg:col-span-2">
+          <div class="sticky top-6">
+            <div class="sign-stage">
+              <!-- MDR preview -->
+              <div id="sign-mdr-preview" class="sign-mdr sign-mdr--bg-black sign-mdr--font-futura sign-mdr--illum-white sign-mdr--pos-center sign-mdr--size-14">
+                <h2 class="sign-mdr__num">1234</h2>
+                <p class="sign-mdr__street"></p>
+              </div>
+              <!-- IBL preview -->
+              <div id="sign-ibl-preview" class="sign-ibl sign-ibl-single ibl-num--silver ibl-illum--4000k sign-ibl--size-12" style="display:none;">
+                <span class="sign-ibl__num">1234</span>
+              </div>
+            </div>
+            <p class="text-center text-xs text-stone-500 mt-3">Live preview · Updates as you change options</p>
+          </div>
+        </div>
+
+        <!-- CONTROLS (right 3 cols on lg) -->
+        <div class="lg:col-span-3 space-y-6">
+
+          <!-- Family selector -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+            <p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">1. Style</p>
+            <div class="grid grid-cols-2 gap-3">
+              <button type="button" class="family-btn p-4 rounded-2xl border-2 transition text-left active" data-family="backlit">
+                <p class="font-display font-bold text-lg text-navy-dark">Lit backplate</p>
+                <p class="text-xs text-stone-600 mt-1">MDR series</p>
+              </button>
+              <button type="button" class="family-btn p-4 rounded-2xl border-2 transition text-left" data-family="dimensional">
+                <p class="font-display font-bold text-lg text-navy-dark">3D numbers</p>
+                <p class="text-xs text-stone-600 mt-1">IBL series</p>
+              </button>
+            </div>
+          </div>
+
+          <!-- Number + (MDR street) -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+            <p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">2. What goes on it</p>
+            <label class="block text-sm font-bold text-navy-dark mb-2">Address number</label>
+            <input id="ctl-number" type="text" maxlength="10" value="1234" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+
+            <div data-family-only="backlit" class="mt-5">
+              <label class="block text-sm font-bold text-navy-dark mb-2">Include street name?</label>
+              <div class="flex gap-2 mb-3 flex-wrap">
+                <button type="button" class="chip include-street-btn active" data-value="no">Just the number</button>
+                <button type="button" class="chip include-street-btn" data-value="yes">Number + street</button>
+              </div>
+              <div id="street-wrap" style="display:none;">
+                <input id="ctl-street" type="text" placeholder="e.g. Seton Circle" class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-brandred focus:ring-2 focus:ring-brandred-50 outline-none transition" />
+                <label class="mt-3 inline-flex items-center gap-2 text-sm text-stone-700">
+                  <input id="ctl-withline" type="checkbox" class="rounded" />
+                  <span>Add a line under the street name (MDR-301)</span>
+                </label>
+              </div>
+              <label class="mt-3 inline-flex items-center gap-2 text-sm text-stone-700">
+                <input id="ctl-withborder" type="checkbox" class="rounded" />
+                <span>Thin border accent on the plate (MDR-200, number only)</span>
+              </label>
+            </div>
+
+            <!-- IBL: style sub-choice -->
+            <div data-family-only="dimensional" class="mt-5" style="display:none;">
+              <label class="block text-sm font-bold text-navy-dark mb-2">Sign shape</label>
+              <div class="flex gap-2 flex-wrap">
+                <button type="button" class="chip ibl-shape-btn active" data-shape="single">Single numbers</button>
+                <button type="button" class="chip ibl-shape-btn" data-shape="line">On a line</button>
+                <button type="button" class="chip ibl-shape-btn" data-shape="plate">On a plate</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Size -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+            <p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">3. Size</p>
+            <!-- MDR sizes -->
+            <div data-family-only="backlit" class="flex gap-2 flex-wrap">
+              <button type="button" class="chip size-btn" data-size="compact">Compact (10")</button>
+              <button type="button" class="chip size-btn active" data-size="standard">Standard (14")</button>
+              <button type="button" class="chip size-btn" data-size="large">Large (17")</button>
+            </div>
+            <!-- IBL sizes (single) -->
+            <div data-family-only="dimensional" data-ibl-shape="single" class="flex gap-2 flex-wrap" style="display:none;">
+              <button type="button" class="chip ibl-size-btn" data-iblsize="compact">8"</button>
+              <button type="button" class="chip ibl-size-btn active" data-iblsize="standard">10"</button>
+              <button type="button" class="chip ibl-size-btn" data-iblsize="large">12"</button>
+              <button type="button" class="chip ibl-size-btn" data-iblsize="xlarge">14"</button>
+            </div>
+            <!-- IBL sizes (line or plate) -->
+            <div data-family-only="dimensional" data-ibl-shape="line-plate" class="flex gap-2 flex-wrap" style="display:none;">
+              <button type="button" class="chip ibl-size-btn active" data-iblsize="standard">14"</button>
+              <button type="button" class="chip ibl-size-btn" data-iblsize="large">17"</button>
+            </div>
+          </div>
+
+          <!-- Color + finish -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+            <p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">4. Color &amp; finish</p>
+
+            <!-- MDR: background + font + illumination + position -->
+            <div data-family-only="backlit">
+              <label class="block text-sm font-bold text-navy-dark mb-2">Background color</label>
+              <div class="flex gap-2 flex-wrap mb-5">
+                <button type="button" class="chip bg-btn active" data-bg="Black">Black</button>
+                <button type="button" class="chip bg-btn" data-bg="White">White</button>
+              </div>
+
+              <label class="block text-sm font-bold text-navy-dark mb-2">Font</label>
+              <div class="flex gap-2 flex-wrap mb-5">
+                <button type="button" class="chip font-btn active" data-font="Futura">Futura</button>
+                <button type="button" class="chip font-btn" data-font="Iowan Old">Iowan Old</button>
+              </div>
+
+              <label class="block text-sm font-bold text-navy-dark mb-2">Illumination color</label>
+              <div class="flex gap-2 flex-wrap mb-5">
+                <button type="button" class="chip mdr-illum-btn active" data-illum="White">White</button>
+                <button type="button" class="chip chip--red mdr-illum-btn" data-illum="Red">Red</button>
+              </div>
+
+              <label class="block text-sm font-bold text-navy-dark mb-2">Number position</label>
+              <div class="flex gap-2 flex-wrap">
+                <button type="button" class="chip pos-btn" data-pos="Left">Left</button>
+                <button type="button" class="chip pos-btn active" data-pos="Center">Center</button>
+                <button type="button" class="chip pos-btn" data-pos="Right">Right</button>
+              </div>
+            </div>
+
+            <!-- IBL: number color + plate color + illumination -->
+            <div data-family-only="dimensional" style="display:none;">
+              <label class="block text-sm font-bold text-navy-dark mb-2">Number color</label>
+              <div class="flex gap-3 items-center mb-5">
+                <button type="button" class="swatch numcolor-btn active" data-numcolor="Black" style="background:#1a1a1a;" title="Black"></button>
+                <button type="button" class="swatch numcolor-btn" data-numcolor="Silver" style="background:linear-gradient(180deg,#f6f6f6 0%,#c8c8cc 45%,#8a8a90 55%,#d8d8dc 100%);" title="Silver"></button>
+                <button type="button" class="swatch numcolor-btn" data-numcolor="White" style="background:#f5f3ec;" title="White"></button>
+              </div>
+
+              <div data-ibl-shape="plate" style="display:none;">
+                <label class="block text-sm font-bold text-navy-dark mb-2">Plate color</label>
+                <div class="flex gap-3 items-center mb-5">
+                  <button type="button" class="swatch platecolor-btn active" data-platecolor="Black" style="background:#1a1a1a;" title="Black"></button>
+                  <button type="button" class="swatch platecolor-btn" data-platecolor="Silver" style="background:linear-gradient(180deg,#d8d8dc 0%,#9a9aa0 50%,#c0c0c6 100%);" title="Silver"></button>
+                </div>
+              </div>
+
+              <label class="block text-sm font-bold text-navy-dark mb-2">Illumination (color temperature)</label>
+              <div class="flex gap-2 flex-wrap">
+                <button type="button" class="chip ibl-illum-btn" data-illum="Warm White (3000K)">Warm 3000K</button>
+                <button type="button" class="chip ibl-illum-btn active" data-illum="Day White (4000K)">Day 4000K</button>
+                <button type="button" class="chip ibl-illum-btn" data-illum="Cool White (6000K)">Cool 6000K</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Power -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200">
+            <p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3">5. Power</p>
+            <div class="flex gap-2 flex-wrap">
+              <button type="button" class="chip power-btn active" data-power="Adaptor">Adaptor (plug-in)</button>
+              <button type="button" class="chip power-btn" data-power="Hard wired">Hard wired</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECOMMENDATION CARD -->
+      <div class="rec-card bg-gradient-to-br from-navy-dark to-navy text-white rounded-3xl p-8 md:p-10 shadow-2xl">
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+          <div>
+            <p class="text-xs font-bold text-brandred uppercase tracking-wider mb-2">Your recommended SKU</p>
+            <p class="font-display text-5xl md:text-6xl font-bold mb-2"><span id="rec-model">MDR-100</span></p>
+            <p class="text-lg text-white/80 mb-4"><span id="rec-family">MDR Series</span> · <span id="rec-size">14"</span></p>
+            <p class="text-sm text-white/70" id="rec-explanation"></p>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-white/60 uppercase tracking-wider mb-3">Configuration</p>
+            <dl id="rec-config" class="space-y-2 text-sm mb-6"></dl>
+            <button id="order-this" type="button" class="w-full px-6 py-4 rounded-full bg-brandred text-white font-bold hover:bg-brandred-dark transition shadow-lg">
+              Order this configuration →
+            </button>
+            <p class="text-xs text-white/60 text-center mt-3">Selections will pre-fill the order form on the next page.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- DISCLAIMER -->
+      <p class="text-center text-xs text-stone-500 mt-6 max-w-2xl mx-auto">
+        Final SKU and price will be confirmed by Illumicor when they call to take payment. The recommendation here is based on your visual choices and follows the same model logic as the paper order form.
+      </p>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-12 px-6 bg-navy-dark text-stone-300 text-sm mt-16">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid md:grid-cols-3 gap-8">
+        <div>
+          <p class="font-display font-bold text-2xl text-white">AddressIt <span class="text-brandred">LED</span></p>
+          <p class="text-xs text-stone-400 mt-1 uppercase tracking-wider">by Illumicor</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-wider text-stone-400 font-bold mb-3">Contact</p>
+          <p class="mb-2"><a href="tel:+12167013492" class="hover:text-white">📞 Shmuly Neuman — 216.701.3492</a></p>
+          <p class="mb-2"><a href="mailto:htz.addressled@gmail.com" class="hover:text-white break-all">✉️ htz.addressled@gmail.com</a></p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-wider text-stone-400 font-bold mb-3">Site</p>
+          <div class="flex flex-col gap-2">
+            <a href="/#why" class="hover:text-white">Why it matters</a>
+            <a href="/#gallery" class="hover:text-white">Gallery</a>
+            <a href="/#models" class="hover:text-white">Models</a>
+            <a href="/builder.html" class="hover:text-white">Build a sign</a>
+            <a href="/contact.html" class="hover:text-white">Contact</a>
+            <a href="/#order" class="hover:text-white">Order</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs text-stone-500">
+        <p>&copy; 2026 Illumicor. All rights reserved.</p>
+        <p>Built by <a href="https://shalomkarr.pages.dev/" target="_blank" rel="noopener" class="font-semibold text-stone-300 hover:text-white underline-offset-4 hover:underline transition">Shalom Karr</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  // ====== Recommendation engine ======
+  /**
+   * @param {Object} state visual builder selections
+   * @returns {Object} { family, model, size, config, explanation, orderPayload }
+   */
+  function recommend(state) {
+    const s = state || {};
+    const notes = [];
+    const isIBL = s.family === 'dimensional';
+    const family = isIBL ? 'IBL' : 'MDR';
+    const sizeMap = { compact: '10"', standard: '14"', large: '17"', xlarge: '14"' };
+    const iblSizeMap = { compact: '8"', standard: '10"', large: '12"', xlarge: '14"' };
+    const number = (s.number || '').toString().trim();
+    if (!number) notes.push('No address number entered yet');
+
+    let model, size, config = {};
+
+    if (!isIBL) {
+      size = sizeMap[s.size] || '14"';
+      const wantsStreet = !!s.includeStreet && !!(s.street || '').trim();
+      if (wantsStreet && size === '10"') {
+        size = '14"';
+        notes.push('10" MDR doesn\'t support street names — upgraded to 14" MDR-101');
+      }
+      if (wantsStreet) {
+        model = s.withLine ? 'MDR-301' : 'MDR-101';
+      } else if (size === '10"') {
+        model = 'MDR';
+      } else if (s.withBorder) {
+        model = 'MDR-200';
+      } else {
+        model = 'MDR-100';
+      }
+      config = {
+        background: s.background || 'Black',
+        font: s.font || 'Futura',
+        illumination: (s.illumination === 'Red' ? 'Red' : 'White'),
+        position: s.position || 'Center',
+        power: s.power || 'Adaptor',
+      };
+    } else {
+      if (s.onPlate) {
+        size = (s.size === 'large') ? '17"' : '14"';
+        model = size === '17"' ? 'IBLP-17' : 'IBLP-14';
+      } else if (s.withLine) {
+        size = (s.size === 'large') ? '17"' : '14"';
+        model = size === '17"' ? 'IBLL-17' : 'IBLL-14';
+      } else {
+        size = iblSizeMap[s.size] || '10"';
+        model = 'IBL-' + size.replace('"', '');
+      }
+      const iblIllum = ['Warm White (3000K)', 'Day White (4000K)', 'Cool White (6000K)'];
+      config.number_color = s.numberColor || 'Black';
+      if (model.startsWith('IBLP')) {
+        if (!s.plateColor) notes.push('Plate color defaulted to Black');
+        config.plate_color = s.plateColor || 'Black';
+      }
+      config.illumination = iblIllum.includes(s.illumination) ? s.illumination : 'Warm White (3000K)';
+      config.power = s.power || 'Adaptor';
+    }
+
+    let why;
+    if (family === 'MDR') {
+      const streetBit = (model === 'MDR-101' || model === 'MDR-301')
+        ? (model === 'MDR-301' ? ' with street name on a line' : ' with street name')
+        : (model === 'MDR-200' ? ' with a thin border accent' : '');
+      why = `${model} at ${size} — backlit ${config.background.toLowerCase()} backplate, ${config.illumination.toLowerCase()} illumination${streetBit}.`;
+    } else {
+      const shape = model.startsWith('IBLP') ? 'on a plate' : model.startsWith('IBLL') ? 'on a line' : 'standalone';
+      why = `${model} at ${size} — 3D ${config.number_color.toLowerCase()} numbers ${shape}, ${config.illumination}.`;
+    }
+    if (notes.length) why += ' Note: ' + notes.join('; ') + '.';
+
+    const c = s.contact || {};
+    const orderPayload = {
+      name: c.name || '', email: c.email || '', phone: c.phone || '',
+      address: c.address || '', city: c.city || '', state: c.state || '', zip: c.zip || '',
+      'purchase-order': c.purchaseOrder || '', promocode: c.promocode || '', notes: c.notes || '',
+      power: config.power,
+      'product-family': family,
+    };
+    if (family === 'MDR') {
+      const withStreet = (model === 'MDR-101' || model === 'MDR-301');
+      orderPayload['mdr-include-type'] = withStreet ? 'with-street' : 'number-only';
+      orderPayload['mdr-model'] = model;
+      orderPayload['mdr-size'] = size;
+      orderPayload['address-number'] = number;
+      orderPayload['street-name'] = withStreet ? (s.street || '') : '';
+      orderPayload['mdr-background'] = config.background;
+      orderPayload['mdr-font'] = config.font;
+      orderPayload['mdr-illumination'] = config.illumination;
+      orderPayload['mdr-position'] = config.position;
+    } else {
+      orderPayload['ibl-model'] = model;
+      orderPayload['ibl-number'] = number;
+      orderPayload['ibl-number-color'] = config.number_color;
+      orderPayload['ibl-plate-color'] = model.startsWith('IBLP') ? config.plate_color : '';
+      orderPayload['ibl-illumination'] = config.illumination;
+    }
+    return { family, model, size, config, explanation: why, orderPayload };
+  }
+
+  // ====== Builder state ======
+  const state = {
+    family: 'backlit',
+    number: '1234',
+    street: '',
+    includeStreet: false,
+    withBorder: false,
+    withLine: false,
+    onPlate: false,
+    size: 'standard',
+    background: 'Black',
+    font: 'Futura',
+    illumination: 'White',          // MDR illumination
+    iblIllumination: 'Day White (4000K)',
+    position: 'Center',
+    iblShape: 'single',
+    numberColor: 'Black',
+    plateColor: 'Black',
+    power: 'Adaptor',
+  };
+
+  // ====== Preview rendering ======
+  const mdrEl = document.getElementById('sign-mdr-preview');
+  const iblEl = document.getElementById('sign-ibl-preview');
+
+  function renderPreview() {
+    if (state.family === 'backlit') {
+      mdrEl.style.display = '';
+      iblEl.style.display = 'none';
+      const bg = state.background === 'White' ? 'sign-mdr--bg-white' : 'sign-mdr--bg-black';
+      const font = state.font === 'Iowan Old' ? 'sign-mdr--font-iowan' : 'sign-mdr--font-futura';
+      const illum = state.illumination === 'Red' ? 'sign-mdr--illum-red' : 'sign-mdr--illum-white';
+      const pos = `sign-mdr--pos-${state.position.toLowerCase()}`;
+      const sizeMap = { compact: 'sign-mdr--size-10', standard: 'sign-mdr--size-14', large: 'sign-mdr--size-17' };
+      const sz = sizeMap[state.size] || 'sign-mdr--size-14';
+      mdrEl.className = `sign-mdr ${bg} ${font} ${illum} ${pos} ${sz}`;
+      mdrEl.querySelector('.sign-mdr__num').textContent = state.number || '';
+      mdrEl.querySelector('.sign-mdr__street').textContent = (state.includeStreet && state.street) ? state.street : '';
+    } else {
+      iblEl.style.display = '';
+      mdrEl.style.display = 'none';
+      let shape = 'sign-ibl-single';
+      if (state.iblShape === 'plate') shape = 'sign-ibl-plate';
+      else if (state.iblShape === 'line') shape = 'sign-ibl-line';
+      const numColor = `ibl-num--${state.numberColor.toLowerCase()}`;
+      const plate = state.iblShape === 'plate' ? `ibl-plate--${state.plateColor.toLowerCase()}` : '';
+      const illumMap = { 'Warm White (3000K)': 'ibl-illum--3000k', 'Day White (4000K)': 'ibl-illum--4000k', 'Cool White (6000K)': 'ibl-illum--6000k' };
+      const illum = illumMap[state.iblIllumination] || 'ibl-illum--4000k';
+      const sizeMap = { compact: 'sign-ibl--size-8', standard: 'sign-ibl--size-10', large: 'sign-ibl--size-12', xlarge: 'sign-ibl--size-14' };
+      // For line/plate, "standard" means 14" and "large" means 17"
+      let sz;
+      if (state.iblShape === 'single') sz = sizeMap[state.size] || 'sign-ibl--size-10';
+      else sz = state.size === 'large' ? 'sign-ibl--size-17' : 'sign-ibl--size-14';
+      iblEl.className = `sign-ibl ${shape} ${numColor} ${plate} ${illum} ${sz}`;
+      iblEl.querySelector('.sign-ibl__num').textContent = state.number || '';
+    }
+    renderRecommendation();
+  }
+
+  function renderRecommendation() {
+    // Build the recommend() state with the right illumination for current family
+    const recState = {
+      ...state,
+      illumination: state.family === 'backlit' ? state.illumination : state.iblIllumination,
+      withLine: state.family === 'dimensional' ? (state.iblShape === 'line') : state.withLine,
+      onPlate: state.iblShape === 'plate',
+    };
+    const rec = recommend(recState);
+    window._lastRec = rec;
+    document.getElementById('rec-model').textContent = rec.model;
+    document.getElementById('rec-family').textContent = rec.family === 'MDR' ? 'MDR Series' : 'IBL Series';
+    document.getElementById('rec-size').textContent = rec.size;
+    document.getElementById('rec-explanation').textContent = rec.explanation;
+
+    const niceKey = k => k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const cfgHtml = Object.entries(rec.config).map(([k, v]) =>
+      `<div class="flex justify-between gap-3 border-b border-white/10 pb-1.5">
+         <dt class="text-white/60">${niceKey(k)}</dt>
+         <dd class="font-semibold text-right">${v}</dd>
+       </div>`
+    ).join('');
+    document.getElementById('rec-config').innerHTML = cfgHtml;
+  }
+
+  // ====== Family-conditional UI ======
+  function syncFamilyUI() {
+    document.querySelectorAll('[data-family-only]').forEach(el => {
+      el.style.display = el.dataset.familyOnly === state.family ? '' : 'none';
+    });
+    // IBL sub-shape conditional groups
+    document.querySelectorAll('[data-ibl-shape]').forEach(el => {
+      const want = el.dataset.iblShape;
+      let show = false;
+      if (state.family !== 'dimensional') show = false;
+      else if (want === 'single') show = state.iblShape === 'single';
+      else if (want === 'plate') show = state.iblShape === 'plate';
+      else if (want === 'line-plate') show = state.iblShape !== 'single';
+      el.style.display = show ? '' : 'none';
+    });
+  }
+
+  // ====== Wiring ======
+  function setActive(group, activeEl) {
+    document.querySelectorAll(group).forEach(b => b.classList.remove('active'));
+    activeEl.classList.add('active');
+  }
+
+  // Family
+  document.querySelectorAll('.family-btn').forEach(b => b.addEventListener('click', () => {
+    state.family = b.dataset.family;
+    setActive('.family-btn', b);
+    syncFamilyUI(); renderPreview();
+  }));
+
+  // Number + street
+  document.getElementById('ctl-number').addEventListener('input', e => { state.number = e.target.value; renderPreview(); });
+  document.getElementById('ctl-street').addEventListener('input', e => { state.street = e.target.value; renderPreview(); });
+  document.querySelectorAll('.include-street-btn').forEach(b => b.addEventListener('click', () => {
+    state.includeStreet = b.dataset.value === 'yes';
+    setActive('.include-street-btn', b);
+    document.getElementById('street-wrap').style.display = state.includeStreet ? '' : 'none';
+    renderPreview();
+  }));
+  document.getElementById('ctl-withline').addEventListener('change', e => { state.withLine = e.target.checked; renderPreview(); });
+  document.getElementById('ctl-withborder').addEventListener('change', e => { state.withBorder = e.target.checked; renderPreview(); });
+
+  // IBL shape
+  document.querySelectorAll('.ibl-shape-btn').forEach(b => b.addEventListener('click', () => {
+    state.iblShape = b.dataset.shape;
+    setActive('.ibl-shape-btn', b);
+    syncFamilyUI(); renderPreview();
+  }));
+
+  // Size
+  document.querySelectorAll('.size-btn').forEach(b => b.addEventListener('click', () => {
+    state.size = b.dataset.size;
+    setActive('.size-btn', b);
+    renderPreview();
+  }));
+  document.querySelectorAll('.ibl-size-btn').forEach(b => b.addEventListener('click', () => {
+    state.size = b.dataset.iblsize;
+    document.querySelectorAll('.ibl-size-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    renderPreview();
+  }));
+
+  // MDR controls
+  document.querySelectorAll('.bg-btn').forEach(b => b.addEventListener('click', () => { state.background = b.dataset.bg; setActive('.bg-btn', b); renderPreview(); }));
+  document.querySelectorAll('.font-btn').forEach(b => b.addEventListener('click', () => { state.font = b.dataset.font; setActive('.font-btn', b); renderPreview(); }));
+  document.querySelectorAll('.mdr-illum-btn').forEach(b => b.addEventListener('click', () => { state.illumination = b.dataset.illum; setActive('.mdr-illum-btn', b); renderPreview(); }));
+  document.querySelectorAll('.pos-btn').forEach(b => b.addEventListener('click', () => { state.position = b.dataset.pos; setActive('.pos-btn', b); renderPreview(); }));
+
+  // IBL controls
+  document.querySelectorAll('.numcolor-btn').forEach(b => b.addEventListener('click', () => { state.numberColor = b.dataset.numcolor; setActive('.numcolor-btn', b); renderPreview(); }));
+  document.querySelectorAll('.platecolor-btn').forEach(b => b.addEventListener('click', () => { state.plateColor = b.dataset.platecolor; setActive('.platecolor-btn', b); renderPreview(); }));
+  document.querySelectorAll('.ibl-illum-btn').forEach(b => b.addEventListener('click', () => { state.iblIllumination = b.dataset.illum; setActive('.ibl-illum-btn', b); renderPreview(); }));
+
+  // Power
+  document.querySelectorAll('.power-btn').forEach(b => b.addEventListener('click', () => { state.power = b.dataset.power; setActive('.power-btn', b); renderPreview(); }));
+
+  // Active button styling helper (for family buttons that aren't chips)
+  const style = document.createElement('style');
+  style.textContent = `.family-btn { border-color: #e7e5e4; background: white; } .family-btn.active { border-color: #D8252E; background: #fdebec; }`;
+  document.head.appendChild(style);
+
+  // Order this configuration
+  document.getElementById('order-this').addEventListener('click', () => {
+    if (!window._lastRec) return;
+    sessionStorage.setItem('addressIt_prefill', JSON.stringify(window._lastRec.orderPayload));
+    window.location.href = '/#order';
+  });
+
+  // Initial render
+  syncFamilyUI();
+  renderPreview();
+  </script>
+
+</body>
+</html>

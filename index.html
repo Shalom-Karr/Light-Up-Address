@@ -222,6 +222,7 @@
         <a href="#why" class="hover:text-brandred">Why</a>
         <a href="#gallery" class="hover:text-brandred">Gallery</a>
         <a href="#models" class="hover:text-brandred">Models</a>
+        <a href="/builder.html" class="hover:text-brandred">Build a sign</a>
         <a href="#faq" class="hover:text-brandred">FAQ</a>
         <a href="/contact.html" class="hover:text-brandred">Contact</a>
       </div>
@@ -255,10 +256,16 @@
     <!-- VIDEO -->
     <div id="video" class="max-w-5xl mx-auto scroll-fade">
       <div class="relative rounded-3xl overflow-hidden nightsky glow-red aspect-video">
-        <iframe class="absolute inset-0 w-full h-full"
-          src="https://player.vimeo.com/video/76979871?title=0&byline=0&portrait=0"
-          frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
-          title="AddressIt LED — Product Demo"></iframe>
+        <video
+          class="absolute inset-0 w-full h-full object-cover"
+          src="/videos/demo.mp4"
+          controls
+          playsinline
+          preload="metadata"
+          poster="/images/flyer.jpg"
+          title="AddressIt LED — Product Demo">
+          Your browser does not support the video tag.
+        </video>
       </div>
       <p class="text-center text-sm text-stone-500 mt-4">See an AddressIt LED sign light up at dusk.</p>
     </div>
@@ -1082,7 +1089,7 @@
       }
 
       // -------- Step navigation --------
-      function showStep(n) {
+      function showStep(n, scroll = true) {
         if (n < 1 || n > totalSteps) return;
         currentStep = n;
         steps.forEach(s => s.classList.toggle('active', +s.dataset.step === n));
@@ -1095,9 +1102,12 @@
 
         if (n === totalSteps) renderSummary();
 
-        const orderSection = document.getElementById('order');
-        const top = orderSection.getBoundingClientRect().top + window.pageYOffset - 80;
-        window.scrollTo({ top, behavior: 'smooth' });
+        // Only scroll on user-initiated step changes — never on initial load
+        if (scroll) {
+          const orderSection = document.getElementById('order');
+          const top = orderSection.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
       }
 
       nextBtn.addEventListener('click', () => {
@@ -1172,13 +1182,68 @@
         HTMLFormElement.prototype.submit.call(form);
       });
 
-      // Initial sync
+      // -------- Prefill from /builder.html via sessionStorage --------
+      function applyPrefill(payload) {
+        if (!payload || typeof payload !== 'object') return false;
+        let applied = false;
+        for (const [key, value] of Object.entries(payload)) {
+          if (value === undefined || value === null || value === '') continue;
+          // Radios
+          const radios = form.querySelectorAll(`input[type="radio"][name="${key}"]`);
+          if (radios.length) {
+            radios.forEach(r => { r.checked = (r.value === value); });
+            applied = true;
+            continue;
+          }
+          // Text/email/tel inputs, textareas, hidden
+          const inputs = form.querySelectorAll(`input[name="${key}"], textarea[name="${key}"]`);
+          if (inputs.length) {
+            inputs[0].value = value;
+            applied = true;
+            continue;
+          }
+          // Selects
+          const selects = form.querySelectorAll(`select[name="${key}"]`);
+          if (selects.length) {
+            selects[0].value = value;
+            applied = true;
+          }
+        }
+        return applied;
+      }
+
+      try {
+        const raw = sessionStorage.getItem('addressIt_prefill');
+        if (raw) {
+          const payload = JSON.parse(raw);
+          sessionStorage.removeItem('addressIt_prefill');
+          if (applyPrefill(payload)) {
+            // Re-sync conditional UI now that values are in place
+            syncFamilySections();
+            syncMdrModels();
+            syncMdrStreet();
+            syncMdrSizes();
+            syncIblPlate();
+
+            // Show a friendly banner above the form
+            const banner = document.createElement('div');
+            banner.className = 'mb-6 p-4 rounded-xl bg-brandred-50 border border-brandred/20 text-sm text-brandred-dark font-semibold';
+            banner.innerHTML = '✨ Your selections from the builder were applied. Step through to confirm and submit.';
+            form.prepend(banner);
+            setTimeout(() => { banner.style.transition = 'opacity 0.5s'; banner.style.opacity = '0.6'; }, 5000);
+          }
+        }
+      } catch (e) {
+        // Ignore malformed prefill payload
+      }
+
+      // Initial sync (no scroll on load)
       syncFamilySections();
       syncMdrModels();
       syncMdrStreet();
       syncMdrSizes();
       syncIblPlate();
-      showStep(1);
+      showStep(1, false);
     });
   </script>
 
