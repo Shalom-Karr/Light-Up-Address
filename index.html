@@ -1022,7 +1022,14 @@
 
           <!-- SUMMARY -->
           <div class="mt-8 p-6 rounded-2xl bg-stone-50 border border-stone-200">
-            <p class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-4">Order summary</p>
+            <div class="flex items-center justify-between flex-wrap gap-3 mb-4">
+              <p class="text-xs font-bold text-stone-500 uppercase tracking-wider">Order summary</p>
+              <button type="button" id="open-preview-btn" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy text-white text-xs font-bold hover:bg-navy-dark transition shadow-sm">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View sample of my sign
+              </button>
+            </div>
+            <p class="text-xs text-stone-500 mb-4">Opens in a new tab — see exactly how your sign will look at night before you submit.</p>
             <dl class="summary-grid grid md:grid-cols-2 gap-x-6" id="order-summary"></dl>
           </div>
 
@@ -1508,6 +1515,42 @@
         summaryEl.innerHTML = pairs.filter(([_, v]) => v).map(([k, v]) =>
           `<div><dt>${k}</dt><dd>${String(v).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</dd></div>`
         ).join('');
+      }
+
+      // -------- Preview ("View sample of my sign") --------
+      const openPreviewBtn = document.getElementById('open-preview-btn');
+      if (openPreviewBtn) {
+        openPreviewBtn.addEventListener('click', () => {
+          const data = new FormData(form);
+          const fam = getFamily();
+          const params = new URLSearchParams();
+
+          if (fam) params.set('family', fam);
+          if (data.get('name'))    params.set('name',    data.get('name'));
+          if (data.get('address')) params.set('address', data.get('address'));
+          if (data.get('city'))    params.set('city',    data.get('city'));
+          if (data.get('state'))   params.set('state',   data.get('state'));
+          if (data.get('zip'))     params.set('zip',     data.get('zip'));
+
+          if (fam === 'MDR') {
+            if (data.get('mdr-model'))        params.set('model',        data.get('mdr-model'));
+            if (data.get('mdr-size'))         params.set('size',         data.get('mdr-size'));
+            if (data.get('address-number'))   params.set('number',       data.get('address-number'));
+            if (data.get('street-name'))      params.set('street',       data.get('street-name'));
+            if (data.get('mdr-background'))   params.set('bg',           data.get('mdr-background'));
+            if (data.get('mdr-font'))         params.set('font',         data.get('mdr-font'));
+            if (data.get('mdr-illumination')) params.set('illumination', data.get('mdr-illumination'));
+            if (data.get('mdr-position'))     params.set('position',     data.get('mdr-position'));
+          } else if (fam === 'IBL') {
+            if (data.get('ibl-model'))        params.set('model',        data.get('ibl-model'));
+            if (data.get('ibl-number'))       params.set('number',       data.get('ibl-number'));
+            if (data.get('ibl-number-color')) params.set('numberColor',  data.get('ibl-number-color'));
+            if (data.get('ibl-plate-color'))  params.set('plateColor',   data.get('ibl-plate-color'));
+            if (data.get('ibl-illumination')) params.set('illumination', data.get('ibl-illumination'));
+          }
+
+          window.open('/preview.html?' + params.toString(), '_blank', 'noopener');
+        });
       }
 
       // -------- Submit handler --------

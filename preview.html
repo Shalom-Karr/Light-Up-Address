@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preview Your Sign — AddressIt LED</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="canonical" href="https://addressitled.com/preview.html" />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#1A3A6E', dark: '#0F2553', soft: '#2C4F87', 50: '#eef2f8' },
+            brandred: { DEFAULT: '#D8252E', dark: '#A91A22', soft: '#E84952', 50: '#fdebec' }
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+            display: ['Fraunces', 'ui-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-display { font-family: 'Fraunces', serif; letter-spacing: -0.02em; }
+    .gradient-text {
+      background: linear-gradient(135deg, #D8252E 0%, #1A3A6E 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    /* ===== night-backdrop stage ===== */
+    .sign-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 480px;
+      padding: 64px 32px;
+      background:
+        radial-gradient(ellipse at 50% 30%, #1a2942 0%, #0b1326 55%, #05080f 100%);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .sign-stage::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 28px);
+      pointer-events: none;
+    }
+
+    /* ===== MDR (lit backplate) ===== */
+    .sign-mdr {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 28px 40px;
+      border-radius: 6px;
+      aspect-ratio: 16 / 9;
+      min-width: 280px;
+      transition: all 0.35s ease;
+    }
+    .sign-mdr--bg-black {
+      background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .sign-mdr--bg-white {
+      background: linear-gradient(180deg, #f4f1ea 0%, #d9d4c7 100%);
+      border: 1px solid #b8b2a4;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    .sign-mdr__num {
+      font-size: clamp(72px, 14vw, 180px);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+    .sign-mdr--font-futura .sign-mdr__num { font-family: 'Inter', 'Futura', sans-serif; font-weight: 800; }
+    .sign-mdr--font-iowan  .sign-mdr__num { font-family: 'Fraunces', 'Iowan Old Style', Georgia, serif; font-weight: 700; }
+    .sign-mdr--size-10 { transform: scale(0.75); }
+    .sign-mdr--size-14 { transform: scale(1.00); }
+    .sign-mdr--size-17 { transform: scale(1.25); }
+    .sign-mdr--pos-left   { align-items: flex-start; text-align: left; }
+    .sign-mdr--pos-center { align-items: center;     text-align: center; }
+    .sign-mdr--pos-right  { align-items: flex-end;   text-align: right; }
+    .sign-mdr--illum-white .sign-mdr__num {
+      color: #fffef5;
+      text-shadow:
+        0 0 4px  #ffffff,
+        0 0 10px #ffffff,
+        0 0 22px rgba(255,255,240,0.95),
+        0 0 42px rgba(255,250,220,0.85),
+        0 0 72px rgba(255,245,200,0.65),
+        0 0 110px rgba(255,240,180,0.45);
+    }
+    .sign-mdr--illum-white.sign-mdr--bg-black {
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.04),
+        0 0 60px rgba(255,245,210,0.25),
+        0 0 120px rgba(255,240,190,0.18);
+    }
+    .sign-mdr--illum-red .sign-mdr__num {
+      color: #ffd9d6;
+      text-shadow:
+        0 0 4px  #ff6a60,
+        0 0 10px #ff2a1e,
+        0 0 22px rgba(255,40,30,0.95),
+        0 0 42px rgba(216,37,46,0.85),
+        0 0 72px rgba(200,20,28,0.65),
+        0 0 110px rgba(170,10,18,0.45);
+    }
+    .sign-mdr--illum-red.sign-mdr--bg-black {
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.04),
+        0 0 60px rgba(216,37,46,0.30),
+        0 0 130px rgba(216,37,46,0.20);
+    }
+    .sign-mdr__street {
+      margin: 14px 0 0;
+      font-size: clamp(11px, 1.6vw, 18px);
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.92;
+    }
+    .sign-mdr--illum-white .sign-mdr__street {
+      color: #fffef5;
+      text-shadow: 0 0 4px #fff, 0 0 12px rgba(255,250,220,0.7);
+    }
+    .sign-mdr--illum-red .sign-mdr__street {
+      color: #ffd0cc;
+      text-shadow: 0 0 4px #ff5a50, 0 0 12px rgba(216,37,46,0.7);
+    }
+    .sign-mdr__street:empty { display: none; }
+
+    /* ===== IBL (3D numbers) ===== */
+    .sign-ibl {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 56px;
+      transition: all 0.35s ease;
+    }
+    .sign-ibl__num {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-weight: 900;
+      font-size: clamp(72px, 14vw, 180px);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin: 0;
+      position: relative;
+      z-index: 2;
+    }
+    .sign-ibl--size-8  { transform: scale(0.65); }
+    .sign-ibl--size-10 { transform: scale(0.80); }
+    .sign-ibl--size-12 { transform: scale(1.00); }
+    .sign-ibl--size-14 { transform: scale(1.18); }
+    .sign-ibl--size-17 { transform: scale(1.40); }
+    .ibl-num--black .sign-ibl__num {
+      color: #1a1a1a;
+      text-shadow:
+        1px 1px 0 #0d0d0d, 2px 2px 0 #0a0a0a, 3px 3px 0 #080808,
+        4px 4px 0 #050505, 5px 5px 0 #030303, 6px 6px 0 #020202,
+        7px 7px 0 #000, 8px 8px 14px rgba(0,0,0,0.85);
+    }
+    .ibl-num--silver .sign-ibl__num {
+      background: linear-gradient(180deg, #f6f6f6 0%, #c8c8cc 45%, #8a8a90 55%, #d8d8dc 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      text-shadow:
+        1px 1px 0 rgba(120,120,128,0.9),
+        2px 2px 0 rgba(95,95,100,0.85),
+        3px 3px 0 rgba(70,70,75,0.8),
+        4px 4px 0 rgba(50,50,55,0.75),
+        5px 5px 0 rgba(35,35,40,0.7),
+        6px 6px 0 rgba(20,20,25,0.65),
+        8px 8px 16px rgba(0,0,0,0.7);
+      filter: drop-shadow(0 2px 1px rgba(255,255,255,0.15));
+    }
+    .ibl-num--white .sign-ibl__num {
+      color: #f5f3ec;
+      text-shadow:
+        1px 1px 0 #d8d4c8, 2px 2px 0 #b8b3a4, 3px 3px 0 #969080,
+        4px 4px 0 #6e6a5c, 5px 5px 0 #4a473d, 6px 6px 0 #2e2c25,
+        7px 7px 0 #15140f, 8px 8px 16px rgba(0,0,0,0.75);
+    }
+    .sign-ibl-single { background: transparent; }
+    .sign-ibl-line .sign-ibl__num { padding-bottom: 18px; }
+    .sign-ibl-line::after {
+      content: "";
+      position: absolute;
+      left: 12%; right: 12%; bottom: 32px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #6a7388 20%, #8892a8 50%, #6a7388 80%, transparent);
+      border-radius: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+    .sign-ibl-plate { padding: 36px 56px; border-radius: 8px; }
+    .sign-ibl-plate.ibl-plate--black {
+      background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .sign-ibl-plate.ibl-plate--silver {
+      background: linear-gradient(180deg, #d8d8dc 0%, #9a9aa0 50%, #c0c0c6 100%);
+      border: 1px solid #6e6e74;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+    .ibl-illum--3000k .sign-ibl__num {
+      filter:
+        drop-shadow(0 0 8px  rgba(255,170,80,0.85))
+        drop-shadow(0 0 22px rgba(255,150,60,0.7))
+        drop-shadow(0 0 48px rgba(255,140,50,0.5));
+    }
+    .ibl-illum--4000k .sign-ibl__num {
+      filter:
+        drop-shadow(0 0 8px  rgba(255,250,235,0.9))
+        drop-shadow(0 0 22px rgba(255,245,220,0.7))
+        drop-shadow(0 0 48px rgba(255,240,210,0.5));
+    }
+    .ibl-illum--6000k .sign-ibl__num {
+      filter:
+        drop-shadow(0 0 8px  rgba(200,225,255,0.9))
+        drop-shadow(0 0 22px rgba(170,210,255,0.7))
+        drop-shadow(0 0 48px rgba(140,195,255,0.5));
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; }
+      .sign-stage { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body class="bg-stone-50 text-navy-dark antialiased min-h-screen flex flex-col">
+
+  <!-- HEADER -->
+  <nav class="bg-white border-b border-stone-200 no-print">
+    <div class="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between gap-3">
+      <a href="/" class="flex items-center gap-3 shrink-0">
+        <img src="/logo.jpg" alt="AddressIt LED" class="h-10 w-auto" />
+      </a>
+      <div class="flex items-center gap-2">
+        <button onclick="window.print()" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-stone-300 text-navy-dark text-sm font-bold hover:border-navy hover:bg-stone-50 transition">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print
+        </button>
+        <button onclick="window.close(); if(!window.closed) history.back();" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy text-white text-sm font-bold hover:bg-navy-dark transition shadow-md">
+          ← Back to order
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-1 px-6 py-10 md:py-14">
+    <div class="max-w-5xl mx-auto">
+
+      <!-- HEADER -->
+      <div class="text-center mb-10">
+        <p class="text-sm font-bold text-brandred uppercase tracking-wider mb-3">Online sample</p>
+        <h1 class="font-display text-4xl md:text-5xl font-bold mb-3 text-navy-dark">
+          Your sign, <span class="gradient-text">previewed.</span>
+        </h1>
+        <p class="text-stone-600 max-w-xl mx-auto">This is how your AddressIt LED sign will look at night with your number and selections.</p>
+      </div>
+
+      <!-- SIGN STAGE -->
+      <div class="sign-stage mb-8">
+        <!-- MDR preview -->
+        <div id="sign-mdr-preview" class="sign-mdr" style="display:none;">
+          <h2 class="sign-mdr__num">1234</h2>
+          <p class="sign-mdr__street"></p>
+        </div>
+        <!-- IBL preview -->
+        <div id="sign-ibl-preview" class="sign-ibl" style="display:none;">
+          <span class="sign-ibl__num">1234</span>
+        </div>
+        <!-- Empty fallback -->
+        <p id="sign-empty" class="text-stone-400 text-center text-sm" style="display:none;">No selections received — return to the order form to choose your style.</p>
+      </div>
+
+      <p class="text-center text-xs text-stone-500 mb-12">Visualization only. Actual brightness, glow halo, and color temperature may vary based on lighting conditions and viewing angle.</p>
+
+      <!-- DETAILS -->
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- Order details -->
+        <div class="bg-white rounded-2xl p-6 border border-stone-200">
+          <p class="text-xs uppercase tracking-wider text-stone-500 font-bold mb-4">Sign details</p>
+          <dl id="details-list" class="space-y-3 text-sm"></dl>
+        </div>
+
+        <!-- Customer details -->
+        <div class="bg-white rounded-2xl p-6 border border-stone-200">
+          <p class="text-xs uppercase tracking-wider text-stone-500 font-bold mb-4">For</p>
+          <dl id="customer-list" class="space-y-3 text-sm"></dl>
+        </div>
+
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-10 text-center no-print">
+        <button onclick="window.close(); if(!window.closed) history.back();" class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-brandred text-white font-bold hover:bg-brandred-dark transition shadow-lg">
+          Looks good — back to order →
+        </button>
+        <p class="text-xs text-stone-500 mt-4">
+          Want to change something? Close this tab and adjust on the order form.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="py-6 px-6 bg-white border-t border-stone-200 text-center text-xs text-stone-500 no-print">
+    <p>AddressIt LED by Illumincor — <a href="/" class="underline hover:text-navy">addressitled.com</a></p>
+  </footer>
+
+  <script>
+    (function(){
+      const p = new URLSearchParams(window.location.search);
+      const family   = (p.get('family') || '').toUpperCase();
+      const number   = p.get('number') || '1234';
+      const street   = p.get('street') || '';
+      const model    = p.get('model') || '';
+      const size     = p.get('size') || '';
+
+      const mdrBg    = p.get('bg') || 'Black';
+      const mdrFont  = p.get('font') || 'Futura';
+      const mdrIllum = p.get('illumination') || 'White';
+      const mdrPos   = p.get('position') || 'Center';
+
+      const iblNum   = p.get('numberColor') || 'Silver';
+      const iblPlate = p.get('plateColor') || 'Black';
+      const iblIllum = p.get('illumination') || '4000K';
+
+      const custName    = p.get('name') || '';
+      const custAddress = p.get('address') || '';
+      const custCity    = p.get('city') || '';
+      const custState   = p.get('state') || '';
+      const custZip     = p.get('zip') || '';
+
+      const mdrPreview = document.getElementById('sign-mdr-preview');
+      const iblPreview = document.getElementById('sign-ibl-preview');
+      const emptyMsg   = document.getElementById('sign-empty');
+
+      function num(s) { return (s + '').replace(/\D/g, '').replace(/^0+(?=\d)/, '') || ''; }
+
+      // ---- Render sign ----
+      if (family === 'MDR') {
+        mdrPreview.style.display = '';
+        mdrPreview.querySelector('.sign-mdr__num').textContent = number || '1234';
+        mdrPreview.querySelector('.sign-mdr__street').textContent = street;
+
+        const bgClass = mdrBg.toLowerCase().includes('white') ? 'sign-mdr--bg-white' : 'sign-mdr--bg-black';
+        const fontKey = mdrFont.toLowerCase().includes('iowan') ? 'sign-mdr--font-iowan' : 'sign-mdr--font-futura';
+        const illKey  = mdrIllum.toLowerCase().includes('red')   ? 'sign-mdr--illum-red'   : 'sign-mdr--illum-white';
+        const posLower = mdrPos.toLowerCase();
+        const posKey  = posLower.includes('left') ? 'sign-mdr--pos-left'
+                      : posLower.includes('right') ? 'sign-mdr--pos-right' : 'sign-mdr--pos-center';
+        const sizeNum = num(size);
+        const sizeKey = sizeNum === '17' ? 'sign-mdr--size-17'
+                      : sizeNum === '10' ? 'sign-mdr--size-10' : 'sign-mdr--size-14';
+
+        mdrPreview.className = `sign-mdr ${bgClass} ${fontKey} ${illKey} ${posKey} ${sizeKey}`;
+
+      } else if (family === 'IBL') {
+        iblPreview.style.display = '';
+        iblPreview.querySelector('.sign-ibl__num').textContent = number || '1234';
+
+        const modelLower = (model || '').toLowerCase();
+        let shapeKey = 'sign-ibl-single';
+        if (modelLower.includes('iblp')) shapeKey = 'sign-ibl-plate';
+        else if (modelLower.includes('ibll')) shapeKey = 'sign-ibl-line';
+
+        let plateClass = '';
+        if (shapeKey === 'sign-ibl-plate') {
+          plateClass = iblPlate.toLowerCase().includes('silver') ? 'ibl-plate--silver' : 'ibl-plate--black';
+        }
+
+        const numLower = iblNum.toLowerCase();
+        const numClass = numLower.includes('silver') ? 'ibl-num--silver'
+                       : numLower.includes('white')  ? 'ibl-num--white' : 'ibl-num--black';
+
+        let illClass = '';
+        const illLower = (iblIllum || '').toLowerCase();
+        if (illLower.includes('3000')) illClass = 'ibl-illum--3000k';
+        else if (illLower.includes('6000')) illClass = 'ibl-illum--6000k';
+        else if (illLower.includes('4000')) illClass = 'ibl-illum--4000k';
+
+        const sizeNum = num(size);
+        let sizeKey = 'sign-ibl--size-12';
+        if (sizeNum === '8')  sizeKey = 'sign-ibl--size-8';
+        else if (sizeNum === '10') sizeKey = 'sign-ibl--size-10';
+        else if (sizeNum === '14') sizeKey = 'sign-ibl--size-14';
+        else if (sizeNum === '17') sizeKey = 'sign-ibl--size-17';
+
+        iblPreview.className = `sign-ibl ${shapeKey} ${plateClass} ${numClass} ${illClass} ${sizeKey}`.trim();
+      } else {
+        emptyMsg.style.display = '';
+      }
+
+      // ---- Populate details ----
+      const details = document.getElementById('details-list');
+      const customer = document.getElementById('customer-list');
+
+      function row(dt, dd) {
+        if (!dd) return '';
+        return `<div class="flex justify-between gap-4 border-b border-stone-100 pb-2 last:border-0 last:pb-0">
+          <dt class="text-stone-500">${dt}</dt>
+          <dd class="font-semibold text-navy-dark text-right">${dd}</dd>
+        </div>`;
+      }
+
+      const rows = [];
+      if (family) rows.push(row('Product family', family + ' series'));
+      if (model)  rows.push(row('Model', model));
+      if (size)   rows.push(row('Size', size + (/\d/.test(size) && !size.includes('"') ? '"' : '')));
+      if (number) rows.push(row('Number', number));
+      if (street) rows.push(row('Street name', street));
+      if (family === 'MDR') {
+        rows.push(row('Background', mdrBg));
+        rows.push(row('Font', mdrFont));
+        rows.push(row('Illumination', mdrIllum));
+        rows.push(row('Position', mdrPos));
+      } else if (family === 'IBL') {
+        rows.push(row('Number color', iblNum));
+        if ((model || '').toLowerCase().includes('iblp')) rows.push(row('Plate color', iblPlate));
+        rows.push(row('Illumination', iblIllum));
+      }
+      details.innerHTML = rows.join('') || '<p class="text-stone-400 text-sm">No details yet.</p>';
+
+      const custRows = [];
+      if (custName)    custRows.push(row('Name', custName));
+      if (custAddress) custRows.push(row('Address', custAddress));
+      const cityState = [custCity, custState].filter(Boolean).join(', ');
+      const locLine = [cityState, custZip].filter(Boolean).join(' ');
+      if (locLine) custRows.push(row('Location', locLine));
+      customer.innerHTML = custRows.join('') || '<p class="text-stone-400 text-sm">Customer info will appear here.</p>';
+    })();
+  </script>
+
+</body>
+</html>
