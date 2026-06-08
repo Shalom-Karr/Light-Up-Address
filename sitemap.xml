@@ -32,8 +32,9 @@
     <priority>0.8</priority>
     <video:video>
       <video:thumbnail_loc>https://addressitled.com/images/flyer.jpg</video:thumbnail_loc>
-      <video:title>AddressIt LED Light-Up Address Sign — Product Demo</video:title>
-      <video:description>Watch an AddressIt LED illuminated house number sign light up at dusk. Real-world demo of the MDR and IBL light-up address signs by Illumicor — built-in dusk-to-dawn sensor, weatherproof, 3-year warranty.</video:description>
+      <video:title>Why a Light-Up Address Sign Matters — AddressIt LED by Illumicore</video:title>
+      <video:description>50-second brand film. An emergency call is made every 1.5 seconds in America, and an unreadable address can delay first responders by up to 5 minutes. Also shows how delivery drivers, family, and friends rely on a clearly visible house number. Closes with an AddressIt LED illuminated address sign by Illumicore, designed to be seen from a distance.</video:description>
+      <video:duration>50</video:duration>
       <video:content_loc>https://addressitled.com/videos/demo.mp4</video:content_loc>
       <video:player_loc>https://addressitled.com/video.html</video:player_loc>
       <video:publication_date>2026-06-07</video:publication_date>
